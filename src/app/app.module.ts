@@ -9,6 +9,7 @@ import { ManagerComponent } from './manager/manager.component';
 import { HeadComponent } from './head/head.component';
 import { AnavigationComponent } from './anavigation/anavigation.component';
 import { MnavigationComponent } from './mnavigation/mnavigation.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MnavigationComponent } from './mnavigation/mnavigation.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
