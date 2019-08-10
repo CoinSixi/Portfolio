@@ -1,0 +1,35 @@
+
+
+.head {
+  width: 100%;
+  height: 80px;
+  background-color: lightgray;
+}
+.head-main {
+  width: 90%;
+  margin-left: 5%;
+  height: 80px;
+}
+.tps_logo {
+  float: left;
+}
+.title {
+  width: 90%;
+  height: 80px;
+}
+.tps_title {
+  color: #5556ab;
+  font-size: 40px;
+  line-height: 10px;
+}
+.user {
+  width: 10%;
+  height: 80px;
+}
+.username {
+  color: #ea5404;
+  line-height: 26px;
+  font-size: 16px;
+  margin-top: 39px;
+  width: 100%;
+}

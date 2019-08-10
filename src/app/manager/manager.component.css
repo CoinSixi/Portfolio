@@ -1,0 +1,14 @@
+.manager {
+  width: 100%;
+  height: 50px;
+  margin-top: 16px;
+}
+.navigator {
+  width: 20%;
+  border: gray solid 0.5px;
+  background-color: #5556ab;
+}
+.content {
+  width: 70%;
+  background-color: #ea5404;
+}
