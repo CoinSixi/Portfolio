@@ -16,9 +16,9 @@ export class LoginComponent implements OnInit {
 
   signIn(): void {
     if (this.username === '1') {
-      this.router.navigate(['/manager']);
+      this.router.navigate(['/manager/portfolios']);
     } else {
-      this.router.navigate(['/administrator']);
+      this.router.navigate(['/administrator/fund-manager']);
     }
 
   }

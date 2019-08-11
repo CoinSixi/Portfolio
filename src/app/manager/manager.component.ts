@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-import { HeadComponent} from '../head/head.component';
 import { AnavigationComponent} from '../anavigation/anavigation.component';
 
 @Component({
@@ -9,6 +7,7 @@ import { AnavigationComponent} from '../anavigation/anavigation.component';
   styleUrls: ['./manager.component.css']
 })
 export class ManagerComponent implements OnInit {
+  isCollapsed = false;
 
   constructor() { }
 

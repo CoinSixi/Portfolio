@@ -1,0 +1,22 @@
+
+.title {
+  width: 90%;
+  height: 100%;
+}
+.tps_title {
+  color: #5556ab;
+  font-size: 30px;
+  line-height: 60px;
+}
+.user {
+  width: 10%;
+  height: 100%;
+}
+.username {
+  color: #000;
+  line-height: 20px;
+  font-size: 16px;
+  margin-top: 30px;
+  margin-left: 50px;
+  width: 100%;
+}
