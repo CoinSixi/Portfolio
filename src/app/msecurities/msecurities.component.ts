@@ -133,8 +133,8 @@ export class MsecuritiesComponent implements OnInit {
     );
   }
 
-  addSecuritis(): void {
-    this.managerService.addSecurity(this.equity, this.selectSecurityId, this.count).subscribe(
+  addPosion(): void {
+    this.managerService.addPosition(this.equity, this.selectSecurityId, this.count).subscribe(
       response => {
         console.log(response);
         if (response.code === 200 ) {

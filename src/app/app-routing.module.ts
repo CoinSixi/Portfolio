@@ -22,7 +22,7 @@ const adminChildRoutes: Routes = [
   {path: '', redirectTo: '/fund-manager', pathMatch: 'full'},
   {path: 'fund-manager', component: AfundManagersComponent},
   {path: 'securities', component: AsecuritiesComponent},
-  {path: 'portfolios', component: AportfolioComponent},
+  {path: 'portfolios', component: AportfoliosComponent},
   {path: 'portfolios/:id', component: AportfolioComponent}
 ];
 const routes: Routes = [

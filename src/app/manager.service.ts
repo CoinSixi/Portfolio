@@ -62,7 +62,7 @@ export class ManagerService {
     return this.http.get(url);
   }
 
-  addSecurity(portfolioId: string, securityId: string, count: number): Observable<any> {
+  addPosition(portfolioId: string, securityId: string, count: number): Observable<any> {
     const url = `${this.baseUrl}/position`;
     const params = new HttpParams().set('portfolioId', portfolioId).set('securityId', securityId).set('quantity', count.toString());
     return this.http
