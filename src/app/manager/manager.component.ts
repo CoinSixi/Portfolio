@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AnavigationComponent} from '../anavigation/anavigation.component';
 
 @Component({
   selector: 'app-manager',
