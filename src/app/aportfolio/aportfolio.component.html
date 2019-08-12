@@ -1,1 +1,29 @@
-<p>aportfolio works!</p>
+
+<div style="width: 40%; margin-left: 30%">
+  <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+    <input type="text" nz-input placeholder="input search text" [(ngModel)]="searchtext" />
+  </nz-input-group>
+  <ng-template #suffixButton>
+    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="searchText()">Search</button>
+  </ng-template>
+</div>
+<nz-table #filterTable [nzData]="showPortfolios">
+  <thead (nzSortChange)="sort($event)" nzSingleSort>
+  <tr>
+    <th>
+      Portfolio Name
+    </th>
+    <th>Manager</th>
+    <th>Update</th>
+    <th nzShowSort nzSortKey="age">Rating</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of filterTable.data">
+    <td>{{ data.portfolioName }}</td>
+    <td>{{ data.userId }}</td>
+    <td>{{ data.updateTime | date }}</td>
+    <td>{{ data.rating }}</td>
+  </tr>
+  </tbody>
+</nz-table>

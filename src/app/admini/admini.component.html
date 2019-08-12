@@ -1,10 +1,10 @@
 <nz-layout>
   <nz-header style="background-color: #1890ff;">
     <div class="float-l title">
-      <p class="tps_title">Portfolio Manager</p>
+      <p class="tps_title">Portfolio Administrator</p>
     </div>
     <div class="float-l user">
-      <p class="username">Manager</p>
+      <p class="username">Admini</p>
     </div>
     <!--<div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
@@ -16,15 +16,15 @@
   <nz-layout>
     <nz-sider nzWidth="200px" nzTheme="light">
       <ul nz-menu nzMode="inline" class="sider-menu">
-        <li nz-menu-item nz-tooltip nzSelected>
+        <li nz-menu-item nz-tooltip nzSelected (click)="select(1)" >
           <i nz-icon nzType="user"></i>
           <span>Fund Maager</span>
         </li>
-        <li nz-menu-item nz-tooltip>
+        <li nz-menu-item nz-tooltip (click)="select(2)" >
           <i nz-icon nzType="laptop"></i>
           <span>Security</span>
         </li>
-        <li nz-menu-item nz-tooltip>
+        <li nz-menu-item nz-tooltip (click)="select(3)" >
           <i nz-icon nzType="notification"></i>
           <span>Portfolio</span>
         </li>

@@ -9,12 +9,14 @@ import {Observable, Observer} from 'rxjs';
   styleUrls: ['./afund-managers.component.css']
 })
 export class AfundManagersComponent implements OnInit {
+  searchtext: string;
   isVisible = false;
   isConfirmLoading = false;
   listUsers: User[];
   editCache: { [key: string]: any } = {};
   validateForm: FormGroup;
   addUser: User = new User();
+  showUser: User[];
   listOfData = [
     {
       key: '1',
@@ -274,7 +276,11 @@ export class AfundManagersComponent implements OnInit {
       role: 'manager',
       phone: '18742018902'
     }];
+    this.showUser = this.listUsers;
     this.updateEditCache();
   }
-
+  searchText(): void {
+    const reg = '.*' + this.searchtext.toString();
+    this.showUser = this.listUsers.filter(portfolio => portfolio.username.match(reg));
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-admini',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminiComponent implements OnInit {
   isCollapsed = false;
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
+  select(num: number): void {
+    if (num === 1) {
+      this.router.navigate(['/administrator/fund-manager']);
+    } else if (num === 2) {
+      this.router.navigate(['/administrator/securities']);
+    } else {
+      this.router.navigate(['/administrator/portfolios']);
+    }
+  }
 }

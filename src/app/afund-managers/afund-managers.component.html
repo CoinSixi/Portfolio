@@ -1,16 +1,16 @@
 
 <div style="width: 40%; margin-left: 30%">
   <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
-    <input type="text" nz-input placeholder="input search text" />
+    <input type="text" nz-input placeholder="input search text"  [(ngModel)]="searchtext" />
   </nz-input-group>
   <ng-template #suffixButton>
-    <button nz-button nzType="primary" nzSize="large" nzSearch>Search</button>
+    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="searchText()">Search</button>
   </ng-template>
 </div>
 <div style="margin-right: 20px; width: 100px; margin-top: 20px">
   <button nz-button nzType="default" nzSize="default" (click)="showModal2()">&nbsp;Add&nbsp;</button>
 </div>
-<nz-table #basicTable [nzData]="listUsers">
+<nz-table #basicTable [nzData]="showUser">
   <thead>
   <tr>
     <th>Name</th>
