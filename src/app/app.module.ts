@@ -23,13 +23,13 @@ import { AportfoliosComponent } from './aportfolios/aportfolios.component';
 import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
-import { MsecuritiesComponent } from './msecurities/msecurities.component';
+import {MsecuritiesComponent} from './msecurities/msecurities.component';
 
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +42,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     MportfoliosComponent,
     MportfolioComponent,
     AportfolioComponent,
-    MsecuritiesComponent
+    MsecuritiesComponent,
   ],
   imports: [
     BrowserModule,
