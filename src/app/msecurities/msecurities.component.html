@@ -35,7 +35,7 @@
     </td>
 
     <td>
-      <a (click)="showModal2()">Add</a>
+      <a (click)="showModal2(data.securityId)">Add</a>
     </td>
   </tr>
   </tbody>
@@ -46,16 +46,21 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Security Type</nz-form-label>
         <nz-form-control [nzSpan]="12">
-          <nz-select [ngModel]="'equity'" nz-input formControlName="portfolio">
+          <nz-select [(ngModel)]="equity" nz-input formControlName="portfolio">
             <nz-option [nzLabel]="portfolio.portfolioName" [nzValue]="portfolio.portfolioName" *ngFor="let portfolio of portfolios"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
-
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Count</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input type="number" nz-input formControlName="count" [(ngModel)]="count" placeholder="10" />
+        </nz-form-control>
+      </nz-form-item>
     </form>
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
-    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Submit</button>
+    <button nz-button nzType="primary" (click)="addSecuritis()" [nzLoading]="isConfirmLoading">Submit</button>
   </div>
 </nz-modal>

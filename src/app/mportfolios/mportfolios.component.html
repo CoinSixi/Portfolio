@@ -26,8 +26,8 @@
     <td>{{ data.portfolioName }}</td>
     <td>{{ data.createTime | date }}</td>
     <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rateDay }}</td>
-    <td>{{ data.rateTotal }}</td>
+    <td>{{ data.rateDay?.toString() }}</td>
+    <td>{{ data.rateTotal?.toString() }}</td>
     <td>
       <a (click)="deletePortfolio(data.portfolioId)">Delete</a>
     </td>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Security} from '../entities/Security';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Portfolio} from '../entities/Portfolio';
+import {ManagerService} from '../manager.service';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-msecurities',
@@ -11,10 +13,13 @@ import {Portfolio} from '../entities/Portfolio';
 export class MsecuritiesComponent implements OnInit {
 
   searchtext: string;
+  equity: string;
+  count: number;
   showSecurities: Security[];
   isVisible = false;
   isConfirmLoading = false;
   validateForm: FormGroup;
+  selectSecurityId: string;
   securiries: Security[] = [
     {
       securityId: '13515',
@@ -74,124 +79,15 @@ export class MsecuritiesComponent implements OnInit {
       todayPrice: 15,
     },
   ];
-  portfolios: Portfolio[] = [/*
-    {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    }, {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    }, {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    },*/
-  ];
-  showModal2(): void {
+  portfolios: Portfolio[] = [];
+  showModal2(securityId: string): void {
+    this.selectSecurityId = securityId;
+    this.getPortfolios();
     this.isVisible = true;
-
   }
   handleOk(): void {
-    this.isConfirmLoading = true;
-    setTimeout(() => {
-      this.isVisible = false;
-      this.isConfirmLoading = false;
-    }, 3000);
+    this.isVisible = false;
+    this.isConfirmLoading = false;
   }
 
   handleCancel(): void {
@@ -205,18 +101,65 @@ export class MsecuritiesComponent implements OnInit {
     }
     return {};
   }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService) {
     this.validateForm = this.fb.group({
-      portfolio: ['', [Validators.required]]
+      portfolio: ['', [Validators.required]],
+      count: ['', [Validators.required]]
     });
   }
 
   ngOnInit() {
+    // this.getSecuritis();
     this.showSecurities = this.securiries;
   }
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
     this.showSecurities = this.securiries.filter(portfolio => portfolio.securityName.match(reg));
+  }
+
+  getSecuritis(): void {
+    this.managerService.getSecurityList().subscribe(
+      response => {
+        if (response.code === 200 ) {
+          console.log(response.data)
+          this.securiries = response.data;
+          this.showSecurities = response.data;
+        } else {
+          this.message.error('Get Failure:' + response.msg, {
+            nzDuration: 10000
+          });
+        }
+      }
+    );
+  }
+
+  addSecuritis(): void {
+    this.managerService.addSecurity(this.equity, this.selectSecurityId, this.count).subscribe(
+      response => {
+        console.log(response);
+        if (response.code === 200 ) {
+          this.getSecuritis();
+          this.handleOk();
+          this.message.success('Create Success!', {
+            nzDuration: 10000
+          });
+        } else {
+          this.message.error('Create Failure:' + response.msg, {
+            nzDuration: 10000
+          });
+        }
+      }
+    );
+  }
+  getPortfolios(): void {
+    this.managerService.getPortfoliosList().subscribe(
+      response => {
+        if (response.code === 200 ) {
+          this.portfolios = response.data;
+        } else {
+        }
+      }
+    );
   }
 
 }
