@@ -74,7 +74,7 @@ export class MsecuritiesComponent implements OnInit {
       todayPrice: 15,
     },
   ];
-  portfolios: Portfolio[] = [
+  portfolios: Portfolio[] = [/*
     {
       portfolioId: '1230131',
       portfolioName: 'HI',
@@ -180,7 +180,7 @@ export class MsecuritiesComponent implements OnInit {
       updateTime: new Date(),
       userId: '256153',
       rating: 0.17
-    },
+    },*/
   ];
   showModal2(): void {
     this.isVisible = true;

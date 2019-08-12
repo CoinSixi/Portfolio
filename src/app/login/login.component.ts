@@ -11,38 +11,34 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
   text1: string;
-  constructor(
-    private api: ApiService,
-    private router: Router,
-    // private loginService: LoginService
-  ) { }
+  constructor(public router: Router, private apiService: ApiService) { }
 
   ngOnInit() {
   }
 
   signIn(): void {
-    /*this.loginService.signIn(this.username, this.password).subscribe(
-      respose => {
-        console.log(respose);
-      }
-    );*/
-    this.api.login(this.username, this.password).subscribe(
-      respose => {
-        if (respose.code === 200 ) {
-          const data = respose.data;
+    /*if (this.username === '1') {
+      this.router.navigate(['/manager/portfolios']);
+    } else {
+      this.router.navigate(['/administrator/fund-manager']);
+    }*/
+    this.apiService.login(this.username, this.password).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          const data = response.data;
+          window.localStorage.setItem('userId', data.userId);
+          window.localStorage.setItem('role', data.role);
+          window.localStorage.setItem('token', data.token);
           if (data.role === 'administrator') {
             this.router.navigateByUrl('/administrator/fund-manager');
           } else if (data.role === 'manager') {
             this.router.navigateByUrl('/manager/portfolios');
           }
         } else {
-          this.text1 = respose.msg;
+          this.text1 = response.msg;
           this.router.navigateByUrl('/login');
         }
       }
     );
-
-
-
   }
 }

@@ -14,18 +14,22 @@
   <thead>
   <tr>
     <th>Portfolio Name</th>
+    <th>Create</th>
     <th>Update</th>
-    <th nzShowSort nzSortKey="age">Rating</th>
+    <th nzShowSort nzSortKey="rateDay">Rating Day</th>
+    <th nzShowSort nzSortKey="rateTotal">Rating Total</th>
     <th>Operation</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
     <td>{{ data.portfolioName }}</td>
+    <td>{{ data.createTime | date }}</td>
     <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rating }}</td>
+    <td>{{ data.rateDay }}</td>
+    <td>{{ data.rateTotal }}</td>
     <td>
-      <a>Delete</a>
+      <a (click)="deletePortfolio(data.portfolioId)">Delete</a>
     </td>
   </tr>
   </tbody>
@@ -36,7 +40,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Portfolio Name</nz-form-label>
         <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-          <input nz-input formControlName="portfolioName" placeholder="username" />
+          <input nz-input formControlName="portfolioName" [(ngModel)]="portfolioName" placeholder="username" />
           <ng-template #userErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">
               Please input your username!
@@ -48,6 +52,6 @@
   </div>
   <div *nzModalFooter>
     <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
-    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Submit</button>
+    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading" (click)="addPortfolio()">Submit</button>
   </div>
 </nz-modal>

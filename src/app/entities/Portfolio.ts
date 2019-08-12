@@ -4,5 +4,6 @@ export class Portfolio {
   createTime: Date;
   updateTime: Date;
   userId: string;
-  rating: number;
+  rateDay: number;
+  rateTotal: number;
 }

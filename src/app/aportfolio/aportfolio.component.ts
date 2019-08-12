@@ -9,7 +9,7 @@ import { Portfolio} from '../entities/Portfolio';
 export class AportfolioComponent implements OnInit {
 
   searchtext: string;
-  portfolios: Portfolio[] = [
+  portfolios: Portfolio[] = [/*
     {
       portfolioId: '1230131',
       portfolioName: 'HI',
@@ -115,7 +115,7 @@ export class AportfolioComponent implements OnInit {
       updateTime: new Date(),
       userId: '256153',
       rating: 0.17
-    },
+    },*/
   ];
 
   showPortfolios: Portfolio[];
