@@ -1,15 +1,79 @@
 import { Component, OnInit } from '@angular/core';
+import {Security} from '../entities/Security';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Portfolio} from '../entities/Portfolio';
-import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {Observable, Observer} from 'rxjs';
 
 @Component({
-  selector: 'app-mportfolios',
-  templateUrl: './mportfolios.component.html',
-  styleUrls: ['./mportfolios.component.css']
+  selector: 'app-msecurities',
+  templateUrl: './msecurities.component.html',
+  styleUrls: ['./msecurities.component.css']
 })
-export class MportfoliosComponent implements OnInit {
+export class MsecuritiesComponent implements OnInit {
+
   searchtext: string;
+  showSecurities: Security[];
+  isVisible = false;
+  isConfirmLoading = false;
+  validateForm: FormGroup;
+  securiries: Security[] = [
+    {
+      securityId: '13515',
+      securityName: 'cndjcd',
+      securityType: 'bonds',
+      lastDay: new Date(2015, 8, 8),
+      lastPrice: 12,
+      today: null,
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'csdjcd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'cndsdvcd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'cnfdvd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'cnsscd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'cndjdfgcd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    }, {
+      securityId: '13515',
+      securityName: 'cndjcd',
+      securityType: 'bonds',
+      lastDay: new Date(),
+      lastPrice: 12,
+      today: new Date(),
+      todayPrice: 15,
+    },
+  ];
   portfolios: Portfolio[] = [
     {
       portfolioId: '1230131',
@@ -118,12 +182,6 @@ export class MportfoliosComponent implements OnInit {
       rating: 0.17
     },
   ];
-
-  showPortfolios: Portfolio[];
-  isVisible = false;
-  isConfirmLoading = false;
-  validateForm: FormGroup;
-
   showModal2(): void {
     this.isVisible = true;
 
@@ -139,29 +197,6 @@ export class MportfoliosComponent implements OnInit {
   handleCancel(): void {
     this.isVisible = false;
   }
-  searchText(): void {
-    const reg = '.*' + this.searchtext.toString();
-    this.showPortfolios = this.portfolios.filter(portfolio => portfolio.portfolioId.match(reg));
-  }
-
-
-  validateConfirmPassword(): void {
-    setTimeout(() => this.validateForm.controls.confirm.updateValueAndValidity());
-  }
-
-  userNameAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        if (control.value === 'JasonWood') {
-          // you have to return `{error: true}` to mark it as an error event
-          observer.next({ error: true, duplicated: true });
-        } else {
-          observer.next(null);
-        }
-        observer.complete();
-      }, 1000);
-    })
-
   confirmValidator = (control: FormControl): { [s: string]: boolean } => {
     if (!control.value) {
       return { error: true, required: true };
@@ -172,12 +207,16 @@ export class MportfoliosComponent implements OnInit {
   }
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({
-      portfolioName: ['', [Validators.required]]
+      portfolio: ['', [Validators.required]]
     });
-    this.showPortfolios = this.portfolios;
   }
 
   ngOnInit() {
+    this.showSecurities = this.securiries;
+  }
+  searchText(): void {
+    const reg = '.*' + this.searchtext.toString();
+    this.showSecurities = this.securiries.filter(portfolio => portfolio.securityName.match(reg));
   }
 
 }

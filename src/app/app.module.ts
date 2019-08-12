@@ -23,6 +23,7 @@ import { AportfoliosComponent } from './aportfolios/aportfolios.component';
 import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
+import { MsecuritiesComponent } from './msecurities/msecurities.component';
 
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
@@ -40,7 +41,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AportfoliosComponent,
     MportfoliosComponent,
     MportfolioComponent,
-    AportfolioComponent
+    AportfolioComponent,
+    MsecuritiesComponent
   ],
   imports: [
     BrowserModule,

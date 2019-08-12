@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-manager',
@@ -8,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 export class ManagerComponent implements OnInit {
   isCollapsed = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  select(num: number): void {
+    if (num === 1) {
+      this.router.navigate(['/manager/portfolios']);
+    } else {
+      this.router.navigate(['/manager/securities']);
+    }
   }
 
 }

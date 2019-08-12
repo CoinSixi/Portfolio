@@ -10,10 +10,12 @@ import {AportfoliosComponent} from './aportfolios/aportfolios.component';
 import {MportfoliosComponent} from './mportfolios/mportfolios.component';
 import {MportfolioComponent} from './mportfolio/mportfolio.component';
 import {AportfolioComponent} from './aportfolio/aportfolio.component';
+import {MsecuritiesComponent} from './msecurities/msecurities.component';
 
 const managerChildRoutes: Routes = [
   {path: '', redirectTo: '/portfolios', pathMatch: 'full'},
   {path: 'portfolios', component: MportfoliosComponent},
+  {path: 'securities', component: MsecuritiesComponent},
   {path: 'portfolios/:id', component: MportfolioComponent}
 ];
 const adminChildRoutes: Routes = [
