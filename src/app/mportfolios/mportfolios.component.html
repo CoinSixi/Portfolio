@@ -22,8 +22,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let data of basicTable.data" (click)="goDeatil(data)">
-    <td>{{ data.portfolioName }}</td>
+  <tr *ngFor="let data of basicTable.data">
+    <td class="portfolio-name" (click)="goDeatil(data)">{{ data.portfolioName }}</td>
     <td>{{ data.createTime | date }}</td>
     <td>{{ data.updateTime | date }}</td>
     <td>{{ data.rateDay }}</td>

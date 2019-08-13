@@ -1,10 +1,10 @@
 <nz-layout>
-  <nz-header style="background-color: lightgray">
+  <nz-header style="background-color: #1890ff;">
     <div class="float-l title">
-      <p class="tps_title">Portfolio Manager</p>
+      <p class="tps_title">Portfolio Administrator</p>
     </div>
     <div class="float-l user">
-      <p class="username">Manager</p>
+      <p class="username">{{username}}</p>
     </div>
     <!--<div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
@@ -36,8 +36,7 @@
     </nz-sider>
     <nz-layout class="inner-layout">
       <nz-breadcrumb>
-        <nz-breadcrumb-item>Home</nz-breadcrumb-item>
-        <nz-breadcrumb-item>List</nz-breadcrumb-item>
+        <nz-breadcrumb-item>&nbsp;</nz-breadcrumb-item>
       </nz-breadcrumb>
       <nz-content>
         <router-outlet></router-outlet>

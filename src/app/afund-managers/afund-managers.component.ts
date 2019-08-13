@@ -36,6 +36,7 @@ export class AfundManagersComponent implements OnInit {
     this.api.addfunduser(this.addUser).subscribe(
       response => {
         if (response.code === 200) {
+          this.getUsers();
           console.log('addfunduser==' + response.data.userId);
         }
       }
@@ -65,6 +66,7 @@ export class AfundManagersComponent implements OnInit {
     this.api.updatefunduser(this.editCache[id].data).subscribe(
       response => {
         if (response.code === 200 ) {
+          this.getUsers();
           console.log('userid:' + response.data.userId + ',update funduser success!');
         } else {
           console.log('update funduser error: ' + response.msg);
@@ -78,6 +80,7 @@ export class AfundManagersComponent implements OnInit {
         console.log(response);
         if (response.code === 200 ) {
           const data = response.data;
+          this.getUsers();
           console.log('delete funduser success!');
         } else {
           console.error('delete funduser error!');
@@ -290,6 +293,10 @@ export class AfundManagersComponent implements OnInit {
       role: 'manager',
       phone: '18742018902'
     }];*/
+    this.getUsers();
+  }
+
+  getUsers(): void {
     this.api.getfundusers().subscribe(
       response => {
         if (response.code === 200 ) {
@@ -305,7 +312,6 @@ export class AfundManagersComponent implements OnInit {
       }
     );
   }
-
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
     console.log(this.listUsers);

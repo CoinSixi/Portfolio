@@ -11,10 +11,14 @@
 <nz-table #basicTable [nzData]="showSecurities">
   <thead>
   <tr>
-    <th>Name</th>
-    <th>Type</th>
+    <th>Security Name</th>
+    <th
+      nzShowFilter
+      [nzFilters]="listOfType"
+      (nzFilterChange)="filter($event, searchAddress)"
+    >Security Type</th>
     <th>Price</th>
-    <th>Update Date</th>
+    <th>Date</th>
     <th>Operation</th>
   </tr>
   </thead>
@@ -40,7 +44,7 @@
   </tr>
   </tbody>
 </nz-table>
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Add Fund Manager" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Add to Portfolio" (nzOnCancel)="handleCancel()">
   <div>
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-manager',
@@ -8,8 +8,8 @@ import {Router} from '@angular/router';
 })
 export class ManagerComponent implements OnInit {
   isCollapsed = false;
-
-  constructor(private router: Router) { }
+  username = window.localStorage.getItem('username');
+  constructor(private router: Router,) { }
 
   ngOnInit() {
   }

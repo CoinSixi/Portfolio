@@ -6,13 +6,14 @@
     <th>Security Name</th>
     <th>Quantity</th>
     <th>Price</th>
+    <th>Rating</th>
     <th>Operation</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
     <td>
-      {{ data.securityId }}
+      {{ data.securityName }}
     </td>
     <td>
       <ng-container *ngIf="!editCache[data.positionId].edit; else phoneInputTpl">
@@ -23,9 +24,11 @@
       </ng-template>
     </td>
     <td>
-      {{ data.securityId }}
+      {{ data.price }}
     </td>
-
+    <td>
+      {{data.rateTotal}}
+    </td>
     <td>
       <ng-container *ngIf="!editCache[data.positionId].edit; else saveTpl">
         <a (click)="startEdit(data.positionId)">Edit</a>

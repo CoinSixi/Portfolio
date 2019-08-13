@@ -20,6 +20,13 @@ export class MsecuritiesComponent implements OnInit {
   isConfirmLoading = false;
   validateForm: FormGroup;
   selectSecurityId: string;
+  sortName: string | null = null;
+  sortValue: string | null = null;
+  searchAddress: string;
+  listOfSearchName: string[] = [];
+  listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
+                { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
+                { text: 'fx', value: 'fx' }];
   securiries: Security[] = [
     {
       securityId: '13515',
@@ -163,6 +170,42 @@ export class MsecuritiesComponent implements OnInit {
         }
       }
     );
+  }
+  filter(listOfSearchName: string[], searchAddress: string): void {
+    this.listOfSearchName = listOfSearchName;
+    this.searchAddress = searchAddress;
+    // this.search();
+    console.log(listOfSearchName);
+    console.log(searchAddress);
+    this.showSecurities = this.securiries.filter(item => {
+      for ( const i of listOfSearchName) {
+        if (item.securityType === i) {
+        }
+      }
+      return  false;
+    });
+    console.log(this.showSecurities);
+  }
+  search(): void {
+    /** filter data **/
+    const filterFunc = (item: Security) =>
+      (this.searchAddress ? item.securityName.indexOf(this.searchAddress) !== -1 : true) &&
+      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.securityName.indexOf(name) !== -1) : true);
+    const data = this.securiries.filter(item => filterFunc(item));
+    /** sort data **/
+    if (this.sortName && this.sortValue) {
+      this.showSecurities = data.sort((a, b) =>
+        this.sortValue === 'ascend'
+          ? a[this.sortName!] > b[this.sortName!]
+          ? 1
+          : -1
+          : b[this.sortName!] > a[this.sortName!]
+          ? 1
+          : -1
+      );
+    } else {
+      this.showSecurities = data;
+    }
   }
 
 }

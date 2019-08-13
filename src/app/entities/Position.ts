@@ -3,11 +3,8 @@ export class Position {
   portfolioId: string;
   securityId: string;
   quantity: number;
-  /*securityName: string;
+  securityName: string;
   securityType: string;
-  lastDay: Date;
-  lastPrice: number;
-  todayPrice: number;
+  price: number;
   rateTotal: number;
-  updateTime: Date;*/
 }

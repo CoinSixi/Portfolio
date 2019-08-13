@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
         if (response.code === 200 ) {
           const data = response.data;
           window.localStorage.setItem('userId', data.userId);
+          window.localStorage.setItem('username', this.username);
           window.localStorage.setItem('role', data.role);
           window.localStorage.setItem('token', data.token);
           if (data.role === 'administrator') {
