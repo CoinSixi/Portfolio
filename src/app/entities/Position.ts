@@ -4,7 +4,10 @@ export class Position {
   securityId: string;
   quantity: number;
   /*securityName: string;
-  price: number;
+  securityType: string;
+  lastDay: Date;
+  lastPrice: number;
+  todayPrice: number;
   rateTotal: number;
   updateTime: Date;*/
 }
