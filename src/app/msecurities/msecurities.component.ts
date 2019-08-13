@@ -27,65 +27,7 @@ export class MsecuritiesComponent implements OnInit {
   listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
                 { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
                 { text: 'fx', value: 'fx' }];
-  securiries: Security[] = [
-    {
-      securityId: '13515',
-      securityName: 'cndjcd',
-      securityType: 'bonds',
-      lastDay: new Date(2015, 8, 8),
-      lastPrice: 12,
-      today: null,
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'csdjcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndsdvcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cnfdvd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cnsscd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndjdfgcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndjcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    },
-  ];
+  securiries: Security[];
   portfolios: Portfolio[] = [];
   showModal2(securityId: string): void {
     this.selectSecurityId = securityId;
@@ -180,6 +122,7 @@ export class MsecuritiesComponent implements OnInit {
     this.showSecurities = this.securiries.filter(item => {
       for ( const i of listOfSearchName) {
         if (item.securityType === i) {
+          return true;
         }
       }
       return  false;

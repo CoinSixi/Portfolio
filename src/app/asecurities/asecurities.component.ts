@@ -20,65 +20,23 @@ export class AsecuritiesComponent implements OnInit {
   validateForm: FormGroup;
   addSecurityType: string;
   addSecurityName: string;
+  searchAddress: string;
+  listOfSearchName: string[] = [];
+  listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
+    { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
+    { text: 'fx', value: 'fx' }];
   securiries: Security[] = [
     {
-      securityId: '13515',
-      securityName: 'cndjcd',
-      securityType: 'bonds',
-      lastDay: new Date(2015, 8, 8),
-      lastPrice: 12,
-      today: null,
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'csdjcd',
-      securityType: 'bonds',
+      securityId: 'string',
+      securityName: 'string',
+      securityType: 'string',
       lastDay: new Date(),
-      lastPrice: 12,
+      lastPrice: 0,
       today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndsdvcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cnfdvd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cnsscd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndjdfgcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    }, {
-      securityId: '13515',
-      securityName: 'cndjcd',
-      securityType: 'bonds',
-      lastDay: new Date(),
-      lastPrice: 12,
-      today: new Date(),
-      todayPrice: 15,
-    },
-  ];
+      todayPrice: 0,
+      priceId: 'string'
+    }
+    ];
   showModal2(): void {
     this.isVisible = true;
   }
@@ -171,6 +129,20 @@ export class AsecuritiesComponent implements OnInit {
     }
     return {};
   }
+
+  filter(listOfSearchName: string[], searchAddress: string): void {
+    this.listOfSearchName = listOfSearchName;
+    this.searchAddress = searchAddress;
+    // this.search();
+    this.showSecurities = this.securiries.filter(item => {
+      for ( const i of listOfSearchName) {
+        if (item.securityType === i) {
+          return true;
+        }
+      }
+      return  false;
+    });
+  }
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.validateForm = this.fb.group({
     securityName: ['', [Validators.required], [this.userNameAsyncValidator]],
@@ -189,6 +161,7 @@ export class AsecuritiesComponent implements OnInit {
           this.showSecurities = this.securiries;
           this.updateEditCache();
           console.log( 'get securities success！');
+          console.log(this.showSecurities);
         } else {
           console.error( 'get securities error!');
         }
