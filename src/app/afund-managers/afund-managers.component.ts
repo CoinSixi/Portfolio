@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {User} from '../entities/User';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
+import {ApiService} from '../api.service';
+import {HttpHeaders, HttpParams} from '@angular/common/http';
+import {Portfolio} from '../entities/Portfolio';
 
 @Component({
   selector: 'app-afund-managers',
@@ -49,7 +52,14 @@ export class AfundManagersComponent implements OnInit {
     }, 3000);
     this.addUser.role = 'manager';
     this.addUser.userId = null;
-    console.log(this.addUser);
+    // console.log(this.addUser);
+    this.api.addfunduser(this.addUser).subscribe(
+      response => {
+        if (response.code === 200) {
+          console.log('addfunduser==' + response.data.userId);
+        }
+      }
+    );
   }
 
   handleCancel(): void {
@@ -71,9 +81,33 @@ export class AfundManagersComponent implements OnInit {
     const index = this.listUsers.findIndex(item => item.userId === id);
     Object.assign(this.listUsers[index], this.editCache[id].data);
     this.editCache[id].edit = false;
+    // console.log('password====' + this.editCache[id].data.password);
+    this.api.updatefunduser(this.editCache[id].data).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          console.log('userid:' + response.data.userId + ',update funduser success!');
+        } else {
+          console.log('update funduser error: ' + response.msg);
+        }
+      }
+    );
   }
+  deletefundsuser(userId: string): void {
+    this.api.delfunduser(userId).subscribe(
+      response => {
+        console.log(response);
+        if (response.code === 200 ) {
+          const data = response.data;
+          console.log('delete funduser success!');
+        } else {
+          console.error('delete funduser error!');
+        }
 
+      }
+    );
+  }
   updateEditCache(): void {
+    // console.log(this.listUsers);
     this.listUsers.forEach(item => {
       this.editCache[item.userId] = {
         edit: false,
@@ -109,7 +143,7 @@ export class AfundManagersComponent implements OnInit {
     }
     return {};
   }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private api: ApiService) {
     this.validateForm = this.fb.group({
       username: ['', [Validators.required], [this.userNameAsyncValidator]],
       phone: ['', [Validators.required]],
@@ -119,7 +153,7 @@ export class AfundManagersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.listUsers = [{
+    /*this.listUsers = [{
       userId: '22222',
       username: 'sixi',
       password: '123',
@@ -275,10 +309,23 @@ export class AfundManagersComponent implements OnInit {
       password: '123',
       role: 'manager',
       phone: '18742018902'
-    }];
-    this.showUser = this.listUsers;
-    this.updateEditCache();
+    }];*/
+    this.api.getfundusers().subscribe(
+      response => {
+        if (response.code === 200 ) {
+          this.listUsers = response.data;
+          this.showUser = this.listUsers;
+          // console.log('***');
+          // console.log(this.showUser);
+          this.updateEditCache();
+          console.log( 'get fundusers success!');
+        } else {
+          console.error( 'get fundusers error!');
+        }
+      }
+    );
   }
+
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
     this.showUser = this.listUsers.filter(portfolio => portfolio.username.match(reg));

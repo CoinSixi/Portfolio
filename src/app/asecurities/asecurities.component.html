@@ -50,7 +50,7 @@
         <a nz-popconfirm nzTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.securityId)">Cancel</a>
       </ng-template>
       <nz-divider nzType="vertical"></nz-divider>
-      <a>Delete</a>
+      <a (click)="deletesecurity(data.securityId)">Delete</a>
     </td>
   </tr>
   </tbody>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Security} from '../entities/Security';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
+import {ApiService} from '../api.service';
+import {User} from '../entities/User';
 
 @Component({
   selector: 'app-asecurities',
@@ -16,6 +18,7 @@ export class AsecuritiesComponent implements OnInit {
   isConfirmLoading = false;
   editCache: { [key: string]: any } = {};
   validateForm: FormGroup;
+  addSecurity: Security = new Security();
 
   securiries: Security[] = [
     {
@@ -85,6 +88,16 @@ export class AsecuritiesComponent implements OnInit {
       this.isVisible = false;
       this.isConfirmLoading = false;
     }, 3000);
+    this.addSecurity.today = new Date();
+    this.api.addSecurity(this.addSecurity).subscribe(
+      response => {
+        if (response.code === 200) {
+          console.log('addSecurity==' + response.data.securityId);
+        } else {
+          console.error('add security error!：' + response.msg);
+        }
+      }
+    );
   }
 
   handleCancel(): void {
@@ -106,6 +119,29 @@ export class AsecuritiesComponent implements OnInit {
     const index = this.securiries.findIndex(item => item.securityId === id);
     Object.assign(this.securiries[index], this.editCache[id].data);
     this.editCache[id].edit = false;
+    this.api.updateSecurity(this.editCache[id].data).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          console.log('securityId:' + response.data.userId + ',update security success!');
+        } else {
+          console.error(response.msg + ': update security error!');
+        }
+      }
+    );
+  }
+  deletesecurity(securityId: string): void {
+    this.api.delfunduser(securityId).subscribe(
+      response => {
+        console.log(response);
+        if (response.code === 200 ) {
+          // const data = response.data;
+          console.log('delete security success!');
+        } else {
+          console.log('delete security error!');
+        }
+
+      }
+    );
   }
 
   updateEditCache(): void {
@@ -136,7 +172,7 @@ export class AsecuritiesComponent implements OnInit {
     }
     return {};
   }
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private api: ApiService) {
     this.validateForm = this.fb.group({
     securityName: ['', [Validators.required], [this.userNameAsyncValidator]],
     type: ['', [Validators.required]]
@@ -144,8 +180,17 @@ export class AsecuritiesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.showSecurities = this.securiries;
-    this.updateEditCache();
+    this.api.getSecurities().subscribe(
+      response => {
+        if (response.code === 200 ) {
+          this.securiries = response.data;
+          this.showSecurities = this.securiries;
+          this.updateEditCache();
+          console.log( 'get securities success！');
+        } else {
+          console.error( 'get securities error!');
+        }
+      });
   }
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
