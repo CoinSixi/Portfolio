@@ -12,7 +12,7 @@ import {Position} from '../entities/Position';
   styleUrls: ['./mportfolios.component.css']
 })
 export class MportfoliosComponent implements OnInit {
-  searchtext: string;
+  searchtext = '';
   portfolioName: string;
   portfolios: Portfolio[] = [];
 
@@ -20,7 +20,19 @@ export class MportfoliosComponent implements OnInit {
   isVisible = false;
   isConfirmLoading = false;
   validateForm: FormGroup;
-
+  sortName: string | null = null;
+  sortValue: string | null = null;
+  listOfSearchName: string[] = [];
+  listOfSearchAddress: string[] = [];
+  mapOfSort: { [key: string]: any } = {
+    portfolioId: null,
+    portfolioName: null,
+    createTime: null,
+    updateTime: null,
+    userName: null,
+    rateDay: null,
+    rateTotal: null
+  };
   showModal2(): void {
     this.isVisible = true;
 
@@ -34,7 +46,7 @@ export class MportfoliosComponent implements OnInit {
     this.isVisible = false;
   }
   searchText(): void {
-    const reg = '.*' + this.searchtext.toString();
+    const reg = '.*' + this.searchtext;
     this.showPortfolios = this.portfolios.filter(portfolio => portfolio.portfolioName.match(reg));
   }
 
@@ -45,9 +57,10 @@ export class MportfoliosComponent implements OnInit {
           console.log(response.data)
           this.portfolios = response.data;
           this.showPortfolios = response.data;
+          this.searchText();
         } else {
           this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         }
       }
@@ -64,11 +77,11 @@ export class MportfoliosComponent implements OnInit {
           this.getPortfolios();
           this.handleOk();
           this.message.success('Create Success!', {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         } else {
           this.message.error('Create Failure:' + response.msg, {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         }
         this.portfolioName = '';
@@ -82,14 +95,13 @@ export class MportfoliosComponent implements OnInit {
         console.log(response);
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
-          this.portfolios.filter(portfolio => portfolio.portfolioId !== portfolioId);
-          this.showPortfolios = this.portfolios;
+          this.getPortfolios();
           this.message.success('Delete Success!', {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         } else {
           this.message.error('Delete Failure:' + response.msg, {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         }
         this.portfolioName = '';
@@ -98,6 +110,37 @@ export class MportfoliosComponent implements OnInit {
   }
   goDeatil(portfolio: Portfolio): void {
     this.router.navigate(['/manager/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName}});
+  }
+  sort(sortName: string, value: string): void {
+    this.sortName = sortName;
+    this.sortValue = value;
+    for (const key in this.mapOfSort) {
+      this.mapOfSort[key] = key === sortName ? value : null;
+    }
+    this.search(this.listOfSearchName, this.listOfSearchAddress);
+  }
+  search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
+    this.listOfSearchName = listOfSearchName;
+    this.listOfSearchAddress = listOfSearchAddress;
+    const filterFunc = (item: Portfolio) =>
+      (this.listOfSearchAddress.length
+        ? this.listOfSearchAddress.some(address => item.address.indexOf(address) !== -1)
+        : true) &&
+      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.name.indexOf(name) !== -1) : true);
+    const listOfData = this.portfolios.filter((item: Portfolio) => filterFunc(item));
+    if (this.sortName && this.sortValue) {
+      this.showPortfolios = listOfData.sort((a, b) =>
+        this.sortValue === 'ascend'
+          ? a[this.sortName!] > b[this.sortName!]
+          ? 1
+          : -1
+          : b[this.sortName!] > a[this.sortName!]
+          ? 1
+          : -1
+      );
+    } else {
+      this.showPortfolios = listOfData;
+    }
   }
   constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService, private router: Router) {
     this.validateForm = this.fb.group({

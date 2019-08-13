@@ -7,4 +7,5 @@ export class Position {
   securityType: string;
   price: number;
   rateTotal: number;
+  [key: string]: any;
 }

@@ -7,7 +7,7 @@
     <button nz-button nzType="primary" nzSize="large" nzSearch (click)="searchText()">Search</button>
   </ng-template>
 </div>
-<div style="margin-right: 20px; width: 100px; margin-top: 20px">
+<div class="table-operations" style="margin-top: 20px">
   <button nz-button nzType="default" nzSize="default" (click)="showModal2()">&nbsp;Add&nbsp;</button>
 </div>
 <nz-table #basicTable [nzData]="showSecurities">
@@ -19,7 +19,9 @@
       [nzFilters]="listOfType"
       (nzFilterChange)="filter($event, searchAddress)"
     >Security Type</th>
-    <th>TodayPrice</th>
+    <th
+      nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('todayPrice', $event)"
+    >Price</th>
     <!--<th>Update Date</th>-->
     <th>Operation</th>
   </tr>

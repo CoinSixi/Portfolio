@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import {ApiService} from '../api.service';
+import {NzMentionService, NzMessageBaseService, NzMessageModule, NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-login',
@@ -8,14 +9,18 @@ import {ApiService} from '../api.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  constructor(public router: Router, private apiService: ApiService, private message: NzMessageService) { }
   username: string;
   password: string;
   text1: string;
-  constructor(public router: Router, private apiService: ApiService) { }
+  checked = false;
 
   ngOnInit() {
+    if (window.localStorage.getItem('username') !== null && window.localStorage.getItem('password') !== null) {
+      this.username = window.localStorage.getItem('username');
+      this.password = window.localStorage.getItem('password');
+    }
   }
-
   signIn(): void {
     this.apiService.login(this.username, this.password).subscribe(
       response => {
@@ -25,6 +30,11 @@ export class LoginComponent implements OnInit {
           window.localStorage.setItem('username', this.username);
           window.localStorage.setItem('role', data.role);
           window.localStorage.setItem('token', data.token);
+          if (this.checked) {
+            window.localStorage.setItem('password', this.password);
+          } else {
+            window.localStorage.removeItem('password');
+          }
           if (data.role === 'administrator') {
             this.router.navigateByUrl('/administrator/fund-manager');
           } else if (data.role === 'manager') {
@@ -32,7 +42,9 @@ export class LoginComponent implements OnInit {
           }
         } else {
           this.text1 = response.msg;
-          this.router.navigateByUrl('/login');
+          this.message.error('Login Failure:' + response.msg, {
+            nzDuration: 2000
+          });
         }
       }
     );

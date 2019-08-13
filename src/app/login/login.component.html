@@ -13,7 +13,7 @@
             <input type="password" [(ngModel)]="password" class="lock" placeholder="password">
             <input type="submit" [disabled]="!username||!password" value="Sign In" (click)="signIn()">
             <div class="forgot-grid">
-              <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i></i>Remember me</label>
+              <label class="checkbox"><input type="checkbox" name="checkbox" [(ngModel)]="checked"><i></i>Remember me</label>
               <div class="clearfix"> </div>
             </div>
         </div>

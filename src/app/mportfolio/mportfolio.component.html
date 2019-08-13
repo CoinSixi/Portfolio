@@ -1,5 +1,6 @@
 <div id="mountNode"></div>
 <div id="c1" ></div>
+<p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
 <nz-table #basicTable [nzData]="positions">
   <thead>
   <tr>
@@ -28,8 +29,8 @@
     <td>
       {{ data.price }}
     </td>
-    <td>
-      {{data.rateTotal}}
+    <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">
+      {{data.rateTotal | percent:'1.2-3'}}
     </td>
     <td>
       <ng-container *ngIf="!editCache[data.positionId].edit; else saveTpl">

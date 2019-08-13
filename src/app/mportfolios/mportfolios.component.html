@@ -16,8 +16,12 @@
     <th>Portfolio Name</th>
     <th>Create</th>
     <th>Update</th>
-    <th nzShowSort nzSortKey="rateDay">Rating Day</th>
-    <th nzShowSort nzSortKey="rateTotal">Rating Total</th>
+    <th
+      nzShowSort [(nzSort)]="mapOfSort.rateDay" (nzSortChange)="sort('rateDay', $event)"
+    >Rating Lastday</th>
+    <th
+      nzShowSort [(nzSort)]="mapOfSort.rateTotal" (nzSortChange)="sort('rateTotal', $event)"
+    >Rating Total</th>
     <th>Operation</th>
   </tr>
   </thead>
@@ -26,8 +30,8 @@
     <td class="portfolio-name" (click)="goDeatil(data)">{{ data.portfolioName }}</td>
     <td>{{ data.createTime | date }}</td>
     <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rateDay }}</td>
-    <td>{{ data.rateTotal }}</td>
+    <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
+    <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
     <td>
       <a (click)="deletePortfolio(data.portfolioId)">Delete</a>
     </td>

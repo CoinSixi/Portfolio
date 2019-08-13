@@ -22,9 +22,22 @@ export class AsecuritiesComponent implements OnInit {
   addSecurityName: string;
   searchAddress: string;
   listOfSearchName: string[] = [];
+  listOfSearchAddress: string[] = [];
   listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
     { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
     { text: 'fx', value: 'fx' }];
+  sortName: string | null = null;
+  sortValue: string | null = null;
+  mapOfSort: { [key: string]: any } = {
+    securityId: null,
+    securityName: null,
+    securityType: null,
+    lastDay: null,
+    lastPrice: null,
+    today: null,
+    todayPrice: null,
+    priceId: null
+  };
   securiries: Security[] = [
     {
       securityId: 'string',
@@ -158,6 +171,38 @@ export class AsecuritiesComponent implements OnInit {
       }
       return  false;
     });
+  }
+
+  sort(sortName: string, value: string): void {
+    this.sortName = sortName;
+    this.sortValue = value;
+    for (const key in this.mapOfSort) {
+      this.mapOfSort[key] = key === sortName ? value : null;
+    }
+    this.search(this.listOfSearchName, this.listOfSearchAddress);
+  }
+  search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
+    this.listOfSearchName = listOfSearchName;
+    this.listOfSearchAddress = listOfSearchAddress;
+    const filterFunc = (item: Security) =>
+      (this.listOfSearchAddress.length
+        ? this.listOfSearchAddress.some(address => item.address.indexOf(address) !== -1)
+        : true) &&
+      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.name.indexOf(name) !== -1) : true);
+    const listOfData = this.securiries.filter((item: Security) => filterFunc(item));
+    if (this.sortName && this.sortValue) {
+      this.showSecurities = listOfData.sort((a, b) =>
+        this.sortValue === 'ascend'
+          ? a[this.sortName!] > b[this.sortName!]
+          ? 1
+          : -1
+          : b[this.sortName!] > a[this.sortName!]
+          ? 1
+          : -1
+      );
+    } else {
+      this.showSecurities = listOfData;
+    }
   }
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.validateForm = this.fb.group({

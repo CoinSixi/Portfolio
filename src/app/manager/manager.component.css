@@ -1,6 +1,6 @@
 
 .title {
-  width: 90%;
+  width: 88%;
   height: 100%;
 }
 .tps_title {
@@ -9,14 +9,19 @@
   line-height: 60px;
 }
 .user {
-  width: 10%;
+  width: 5%;
   height: 100%;
 }
 .username {
   color: #000;
-  line-height: 20px;
+  line-height: 0px;
   font-size: 16px;
   margin-top: 30px;
   margin-left: 50px;
   width: 100%;
+}
+.logout:hover {
+  cursor: pointer;
+  color: red;
+  text-decoration: #000;
 }

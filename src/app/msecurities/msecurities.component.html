@@ -34,7 +34,7 @@
       {{ data.securityType }}
     </td>
     <td>
-      {{ data.todayPrice }}
+      {{ data.todayPrice? data.todayPrice: data.lastPrice }}
     </td>
 
     <td>

@@ -86,7 +86,8 @@ export class ManagerService {
 
   updatePosition(positionId: string, quantity: number): Observable<any> {
     const url = `${this.baseUrl}/position/${positionId}`;
-    const params = new HttpParams().set('positionId', positionId).set('quantity', String(quantity));
+    const params = new HttpParams().set('quantity', String(quantity));
+    console.log(params);
     return this.http
       .request('POST', url,
         {

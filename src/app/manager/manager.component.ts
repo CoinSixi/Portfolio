@@ -22,4 +22,11 @@ export class ManagerComponent implements OnInit {
     }
   }
 
+  logout(): void {
+    window.localStorage.removeItem('userId');
+    window.localStorage.removeItem('role');
+    window.localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
 }

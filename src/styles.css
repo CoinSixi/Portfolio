@@ -70,3 +70,12 @@ nz-content {
   padding: 24px;
   min-height: 280px;
 }
+margin-l-10 {
+  margin-left: 10px;
+}
+.color-red {
+  color: red;
+}
+.color-green {
+  color: green;
+}

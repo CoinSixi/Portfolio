@@ -23,4 +23,10 @@ export class AdminiComponent implements OnInit {
       this.router.navigate(['/administrator/portfolios']);
     }
   }
+  logout(): void {
+    window.localStorage.removeItem('userId');
+    window.localStorage.removeItem('role');
+    window.localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }

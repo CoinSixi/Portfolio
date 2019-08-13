@@ -14,9 +14,13 @@
       Portfolio Name
     </th>
     <th>Manager</th>
-    <th>Update</th>
-    <th nzShowSort nzSortKey="age">RateDay</th>
-    <th nzShowSort nzSortKey="age">TotalRating</th>
+    <th>Date</th>
+    <th
+      nzShowSort [(nzSort)]="mapOfSort.rateDay" (nzSortChange)="sort('rateDay', $event)"
+    >Rating Lastday</th>
+    <th
+      nzShowSort [(nzSort)]="mapOfSort.rateTotal" (nzSortChange)="sort('rateTotal', $event)"
+    >Rating Total</th>
   </tr>
   </thead>
   <tbody>
@@ -24,8 +28,8 @@
     <td>{{ data.portfolioName }}</td>
     <td>{{ data.userName }}</td>
     <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rateDay }}</td>
-    <td>{{ data.rateTotal }}</td>
+    <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
+    <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
   </tr>
   </tbody>
 </nz-table>

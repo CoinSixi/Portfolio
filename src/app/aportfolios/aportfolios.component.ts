@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Portfolio} from '../entities/Portfolio';
 import {ApiService} from '../api.service';
+import {Security} from '../entities/Security';
 
 @Component({
   selector: 'app-aportfolios',
@@ -13,10 +14,20 @@ export class AportfoliosComponent implements OnInit {
   portfolios: Portfolio[] = [];
 
   showPortfolios: Portfolio[];
+  searchRating: string;
   sortName: string | null = null;
   sortValue: string | null = null;
-  searchRating: string;
   listOfSearchName: string[] = [];
+  listOfSearchAddress: string[] = [];
+  mapOfSort: { [key: string]: any } = {
+    portfolioId: null,
+    portfolioName: null,
+    createTime: null,
+    updateTime: null,
+    userName: null,
+    rateDay: null,
+    rateTotal: null
+  };
   constructor(private api: ApiService) { }
 
   ngOnInit() {
@@ -36,21 +47,25 @@ export class AportfoliosComponent implements OnInit {
     const reg = '.*' + this.searchtext.toString();
     this.showPortfolios = this.portfolios.filter(portfolio => portfolio.portfolioName.match(reg));
   }
-  sort(sort: { key: string; value: string }): void {
-    this.sortName = sort.key;
-    this.sortValue = sort.value;
-    this.search();
+  sort(sortName: string, value: string): void {
+    this.sortName = sortName;
+    this.sortValue = value;
+    for (const key in this.mapOfSort) {
+      this.mapOfSort[key] = key === sortName ? value : null;
+    }
+    this.search(this.listOfSearchName, this.listOfSearchAddress);
   }
-
-  filter(listOfSearchName: string[], searchRating: string): void {
+  search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
     this.listOfSearchName = listOfSearchName;
-    this.searchRating = searchRating;
-    this.search();
-  }
-  search(): void {
-    const data = this.portfolios;
+    this.listOfSearchAddress = listOfSearchAddress;
+    const filterFunc = (item: Portfolio) =>
+      (this.listOfSearchAddress.length
+        ? this.listOfSearchAddress.some(address => item.address.indexOf(address) !== -1)
+        : true) &&
+      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.name.indexOf(name) !== -1) : true);
+    const listOfData = this.portfolios.filter((item: Portfolio) => filterFunc(item));
     if (this.sortName && this.sortValue) {
-      this.showPortfolios = data.sort((a, b) =>
+      this.showPortfolios = listOfData.sort((a, b) =>
         this.sortValue === 'ascend'
           ? a[this.sortName!] > b[this.sortName!]
           ? 1
@@ -60,7 +75,7 @@ export class AportfoliosComponent implements OnInit {
           : -1
       );
     } else {
-      this.showPortfolios = data;
+      this.showPortfolios = listOfData;
     }
   }
 }

@@ -6,6 +6,12 @@
     <div class="float-l user">
       <p class="username">{{username}}</p>
     </div>
+    <div class="float-l user">
+      <a class="username" nz-popconfirm nzTitle="Are you sure?" (nzOnConfirm)="logout()">Logout</a>
+      <ng-template #iconTpl>
+        <i nz-icon nzType="question-circle-o" style="color: red;"></i>
+      </ng-template>
+    </div>
     <!--<div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
       <li nz-menu-item nzSelected>nav 1</li>

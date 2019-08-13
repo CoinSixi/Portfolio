@@ -7,4 +7,5 @@ export class Security {
   today: Date;
   todayPrice: number;
   priceId: string;
+  [key: string]: any;
 }
