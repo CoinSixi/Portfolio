@@ -6,4 +6,5 @@ export class Security {
   lastPrice: number;
   today: Date;
   todayPrice: number;
+  priceId: string;
 }

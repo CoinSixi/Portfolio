@@ -11,8 +11,8 @@ import { NzNotificationService } from 'ng-zorro-antd';
 })
 export class ApiService {
 
-  // private baseUrl = 'http://192.168.43.49:8080';
-  private baseUrl = 'http://117.78.11.72:8080';
+  private baseUrl = 'http://192.168.43.49:8080';
+  // private baseUrl = 'http://117.78.11.72:8080';
   constructor(
     private http: HttpClient,
     // @Inject(API_URL) public urlPrefix,
@@ -100,7 +100,7 @@ export class ApiService {
     return this.http.post(this.baseUrl + '/admin/security/' + param.securityId, params);
   }
   delSecurity(securityId: string): Observable<any> {
-    return this.http.delete(this.baseUrl + '/admin/security' + securityId);
+    return this.http.delete(this.baseUrl + '/admin/security/' + securityId);
   }
   // 价格API
   getPrice(priceId: string): Observable<any> {

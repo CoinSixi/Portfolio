@@ -15,15 +15,17 @@
     </th>
     <th>Manager</th>
     <th>Update</th>
-    <th nzShowSort nzSortKey="age">Rating</th>
+    <th nzShowSort nzSortKey="age">RateDay</th>
+    <th nzShowSort nzSortKey="age">TotalRating</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of filterTable.data">
     <td>{{ data.portfolioName }}</td>
-    <td>{{ data.userId }}</td>
+    <td>{{ data.userName }}</td>
     <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rating }}</td>
+    <td>{{ data.rateDay }}</td>
+    <td>{{ data.rateTotal }}</td>
   </tr>
   </tbody>
 </nz-table>

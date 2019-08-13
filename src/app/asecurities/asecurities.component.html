@@ -15,8 +15,8 @@
   <tr>
     <th>Name</th>
     <th>Type</th>
-    <th>Price</th>
-    <th>Update Date</th>
+    <th>TodayPrice</th>
+    <!--<th>Update Date</th>-->
     <th>Operation</th>
   </tr>
   </thead>
@@ -37,9 +37,9 @@
       </ng-template>
     </td>
 
-    <td>
+    <!--<td>
       {{ (data.today !== null? data.today: data.lastDay) | date }}
-    </td>
+    </td>-->
 
     <td>
       <ng-container *ngIf="!editCache[data.securityId].edit; else saveTpl">
@@ -61,7 +61,7 @@
       <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Security Name</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
-        <input nz-input formControlName="securityName" [(ngModel)]="addSecurityName" placeholder="username" />
+        <input nz-input formControlName="securityName" [(ngModel)]="addSecurity.securityName" placeholder="username" />
         <ng-template #userErrorTpl let-control>
           <ng-container *ngIf="control.hasError('required')">
             Please input your security name!
@@ -72,7 +72,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Security Type</nz-form-label>
         <nz-form-control [nzSpan]="12">
-          <nz-select [ngModel]="'equity'" nz-input formControlName="type" [(ngModel)]="addSecurityType">
+          <nz-select [ngModel]="'equity'" nz-input formControlName="type" [(ngModel)]="addSecurity.securityType" >
             <nz-option [nzLabel]="'equity'" [nzValue]="'equity'"></nz-option>
             <nz-option [nzLabel]="'bonds'" [nzValue]="'bonds'"></nz-option>
             <nz-option [nzLabel]="'derivative'" [nzValue]="'derivatives'"></nz-option>

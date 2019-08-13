@@ -38,16 +38,15 @@ export class ManagerService {
   deletePortFolio(portfolioId: string): Observable<any> {
     const headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*');
     // headers.set('Access-Control-Allow-Headers', 'X-Requested-With');
-    headers.set('Access-Control-Allow-Headers', 'Authorization, X-Requested-With, Access-Control-Allow-Methods, Access-Control-Allow-Origin');
-    headers.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+    // headers.set('Access-Control-Allow-Headers',
+      // 'Authorization, X-Requested-With, Access-Control-Allow-Methods, Access-Control-Allow-Origin');
+    // headers.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
     const url = `${this.baseUrl}/portfolio`;
-    const params = new HttpParams().set('portfolio_id', portfolioId);
+    // const params = new HttpParams().set('portfolio_id', portfolioId);
     return this.http
-      .request('DELETE', url,
+      .request('DELETE', url + '/' + portfolioId,
         {
           responseType: 'json',
-          params,
-          headers
         });
   }
 
@@ -85,7 +84,8 @@ export class ManagerService {
   deletePosition(positionId: string): Observable<any> {
     const headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*');
     // headers.set('Access-Control-Allow-Headers', 'X-Requested-With');
-    headers.set('Access-Control-Allow-Headers', 'Authorization, X-Requested-With, Access-Control-Allow-Methods, Access-Control-Allow-Origin');
+    headers.set('Access-Control-Allow-Headers',
+      'Authorization, X-Requested-With, Access-Control-Allow-Methods, Access-Control-Allow-Origin');
     headers.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
     const url = `${this.baseUrl}/position`;
     const params = new HttpParams().set('positionId', positionId);
