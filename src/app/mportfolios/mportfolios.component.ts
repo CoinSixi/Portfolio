@@ -35,7 +35,7 @@ export class MportfoliosComponent implements OnInit {
   }
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
-    this.showPortfolios = this.portfolios.filter(portfolio => portfolio.portfolioId.match(reg));
+    this.showPortfolios = this.portfolios.filter(portfolio => portfolio.portfolioName.match(reg));
   }
 
   getPortfolios(): void {

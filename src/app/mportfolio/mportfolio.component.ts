@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Position} from '../entities/Position';
-import {User} from '../entities/User';
-import {FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {Portfolio} from '../entities/Portfolio';
-import {F2} from 'codelyzer/util/function';
 import {ManagerService} from '../manager.service';
 import {NzMessageService} from 'ng-zorro-antd';
 
@@ -15,31 +12,14 @@ import {NzMessageService} from 'ng-zorro-antd';
 })
 export class MportfolioComponent implements OnInit {
 
+  title = 'app';
+  data = {};
+  chart ;
+  graph;
+
   editCache: { [key: string]: any } = {};
   portfolio: Portfolio = new Portfolio();
-  positions: Position[] = [
-    {
-      positionId: '14424',
-      portfolioId: '14414',
-      securityId: '04144',
-      quantity: 20
-    }, {
-      positionId: '15421',
-      portfolioId: '14414',
-      securityId: '04144',
-      quantity: 18
-    }, {
-      positionId: '14441',
-      portfolioId: '14414',
-      securityId: '04144',
-      quantity: 20
-    }, {
-      positionId: '16421',
-      portfolioId: '14414',
-      securityId: '04144',
-      quantity: 11
-    }
-];
+  positions: Position[] = [];
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
@@ -67,37 +47,18 @@ export class MportfolioComponent implements OnInit {
         data: { ...item }
       };
     });
+    console.log(this.editCache);
   }
 
-  // @ts-ignore
+
   constructor(public activatedRouter: ActivatedRoute, private managerService: ManagerService, private message: NzMessageService) { }
 
   ngOnInit() {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
-    this.updateEditCache();
-    this.drawBarChart();
+    this.getPositions();
   }
-  drawBarChart() {
-    /*F2.track(false);
-    const data = [
-      { weekday: 'Mon', bugnum: 100 },
-      { weekday: 'Tue', bugnum: 120 },
-      { weekday: 'Wed', bugnum: 130 },
-      { weekday: 'Thu', bugnum: 160 },
-      { weekday: 'Fri', bugnum: 150 },
-      { weekday: 'Sat', bugnum: 190 },
-      { weekday: 'Sun', bugnum: 210 }
-    ];
-    const chart = new F2.Chart({
-      id: 'f2_c1',
-      pixelRatio: window.devicePixelRatio // 指定分辨率
-    });
 
-    chart.source(data);
-    chart.interval().position('weekday*bugnum').color('weekday');
-    chart.render();*/
-  }
   updatePosition(positionId: string): void {
     console.log(this.editCache[positionId].data.quantity);
     this.managerService.updatePosition(positionId, this.editCache[positionId].data.quantity).subscribe(
@@ -121,8 +82,10 @@ export class MportfolioComponent implements OnInit {
     this.managerService.getPositions(this.portfolio.portfolioId).subscribe(
       response => {
         if (response.code === 200 ) {
-          console.log(response.data)
+          console.log(response.data);
           this.positions = response.data;
+          this.updateEditCache();
+          this.chartData();
         } else {
           this.message.error('Get Failure:' + response.msg, {
             nzDuration: 10000
@@ -149,5 +112,38 @@ export class MportfolioComponent implements OnInit {
         }
       }
     );
+  }
+  chartData() {
+    this.chart = new G2.Chart({
+      container: 'c1', // 指定图表容器 ID
+      width : 600, // 指定图表宽度
+      height : 300 // 指定图表高度
+    });
+    const crosshairs =  {
+      // rect 	表示矩形框，
+      // x 		表示水平辅助线，
+      // y|line  	【默认】表示垂直辅助线
+      // cross 	表示十字辅助线
+      type: 'line'
+    }
+    this.chart.source(this.positions);
+    this.chart.scale('positionId', {
+      min: 0
+    });
+    this.chart.scale('quantity', {
+      range: [0, 1]
+    });
+    this.chart.tooltips = crosshairs;
+    this.chart.line().position('positionId*quantity');
+    this.chart.point().position('positionId*quantity').size(2).shape('circle').style({
+      stroke: '#fff',
+      lineWidth: 1
+    });
+    //  渲染图表
+    this.chart.render();
+  }
+  pieChart(): void {
+    const startAngle = -Math.PI / 2 - Math.PI / 4;
+
   }
 }

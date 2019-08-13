@@ -109,8 +109,8 @@ export class MsecuritiesComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getSecuritis();
-    this.showSecurities = this.securiries;
+    this.getSecuritis();
+    // this.showSecurities = this.securiries;
   }
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
@@ -134,10 +134,13 @@ export class MsecuritiesComponent implements OnInit {
   }
 
   addPosion(): void {
-    this.managerService.addPosition(this.equity, this.selectSecurityId, this.count).subscribe(
+    const portfolioId = this.portfolios.filter(item => item.portfolioName === this.equity)[0].portfolioId;
+    this.managerService.addPosition(portfolioId, this.selectSecurityId, this.count).subscribe(
       response => {
         console.log(response);
         if (response.code === 200 ) {
+          this.equity = '';
+          this.count = 0;
           this.getSecuritis();
           this.handleOk();
           this.message.success('Create Success!', {

@@ -3,4 +3,8 @@ export class Position {
   portfolioId: string;
   securityId: string;
   quantity: number;
+  /*securityName: string;
+  price: number;
+  rateTotal: number;
+  updateTime: Date;*/
 }

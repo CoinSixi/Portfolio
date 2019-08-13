@@ -24,8 +24,7 @@ import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
 import {MsecuritiesComponent} from './msecurities/msecurities.component';
-import {G2ChartModule} from 'g2-angular';
-import F2 from '@antv/f2/build/f2';
+import * as G2 from '@antv/g2';
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -57,7 +56,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     HttpClientJsonpModule,
     ScrollingModule,
     DragDropModule,
-    G2ChartModule.forRoot()
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }],
   bootstrap: [AppComponent]
