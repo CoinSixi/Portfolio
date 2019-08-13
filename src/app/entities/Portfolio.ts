@@ -3,7 +3,7 @@ export class Portfolio {
   portfolioName: string;
   createTime: Date;
   updateTime: Date;
-  userId: string;
+  userName: string;
   rateDay: number;
   rateTotal: number;
 }

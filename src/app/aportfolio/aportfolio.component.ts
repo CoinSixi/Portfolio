@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Portfolio} from '../entities/Portfolio';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-aportfolio',
@@ -9,124 +10,26 @@ import { Portfolio} from '../entities/Portfolio';
 export class AportfolioComponent implements OnInit {
 
   searchtext: string;
-  portfolios: Portfolio[] = [/*
-    {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    }, {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    }, {
-      portfolioId: '1230131',
-      portfolioName: 'HI',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.2
-    }, {
-      portfolioId: '1230151',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256553',
-      rating: 0.13
-    }, {
-      portfolioId: '1238131',
-      portfolioName: 'HI5',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '25526153',
-      rating: 0.14
-    }, {
-      portfolioId: '123049131',
-      portfolioName: 'H151I',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.16
-    }, {
-      portfolioId: '123015661',
-      portfolioName: 'HI15',
-      createTime: new Date(),
-      updateTime: new Date(),
-      userId: '256153',
-      rating: 0.17
-    },*/
-  ];
+  portfolios: Portfolio[] = [];
 
   showPortfolios: Portfolio[];
   sortName: string | null = null;
   sortValue: string | null = null;
   searchRating: string;
   listOfSearchName: string[] = [];
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   ngOnInit() {
-    this.showPortfolios = this.portfolios;
+    this.api.getportfolios().subscribe(
+      response => {
+        if (response.code === 200 ) {
+          this.portfolios = response.data;
+          this.showPortfolios = this.portfolios;
+          console.log( 'get portfolios success！');
+        } else {
+          console.error( 'get portfolios error!');
+        }
+      });
   }
 
   searchText(): void {
