@@ -76,15 +76,31 @@ export class AsecuritiesComponent implements OnInit {
     const index = this.securiries.findIndex(item => item.securityId === id);
     Object.assign(this.securiries[index], this.editCache[id].data);
     this.editCache[id].edit = false;
-    this.api.updateSecurity(this.editCache[id].data).subscribe(
-      response => {
-        if (response.code === 200 ) {
-          console.log('securityId:' + response.data.userId + ',update security success!');
-        } else {
-          console.error(response.msg + ': update security error!');
+    if (this.editCache[id].data.priceId !== null) {
+      console.log(this.editCache[id].data);
+      this.api.updateSecurity(this.editCache[id].data).subscribe(
+        response => {
+          if (response.code === 200 ) {
+            this.getSecurities();
+            console.log('securityId:' + response.data.userId + ',update security success!');
+          } else {
+            console.error(response.msg + ': update security error!');
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.api.addPrice(this.editCache[id].data.securityId, this.editCache[id].data.todayPrice).subscribe(
+        response => {
+          if (response.code === 200 ) {
+            this.getSecurities();
+            console.log('securityId:' + response.data.userId + ',update security success!');
+          } else {
+            console.error(response.msg + ': update security error!');
+          }
+        }
+      );
+    }
+
   }
   deletesecurity(securityId: string): void {
     this.api.delfunduser(securityId).subscribe(

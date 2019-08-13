@@ -115,7 +115,7 @@ export class MportfolioComponent implements OnInit {
       }
     );
   }
-  chartData() {
+  /*chartData() {
     const data = [
       { weekday: 'Mon', bugnum: 100 },
       { weekday: 'Tue', bugnum: 120 },
@@ -133,7 +133,7 @@ export class MportfolioComponent implements OnInit {
     chart.source(data);
     chart.interval().position('weekday*bugnum').color('weekday');
     chart.render();
-    /*const crosshairs =  {
+    /!*const crosshairs =  {
       // rect 	表示矩形框，
       // x 		表示水平辅助线，
       // y|line  	【默认】表示垂直辅助线
@@ -154,10 +154,10 @@ export class MportfolioComponent implements OnInit {
       lineWidth: 1
     });
     //  渲染图表
-    this.chart.render();*/
+    this.chart.render();*!/
   }
   pieChart(): void {
-   /* const data = [{
+   /!* const data = [{
       type: '评估中',
       percent: 0.23
     }, {
@@ -213,7 +213,7 @@ export class MportfolioComponent implements OnInit {
       el.nativeElement.querySelector('.g2-guide-html .title').text('项目总计');
       el.nativeElement.querySelector('.g2-guide-html .value').text(500);
     });
-    chart.render();*/
+    chart.render();*!/
 
-  }
+  }*/
 }

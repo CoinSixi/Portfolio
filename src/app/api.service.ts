@@ -4,6 +4,7 @@ import 'rxjs';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd';
+import set = Reflect.set;
 
 // export const API_URL = new InjectionToken<string>('117.78.11.72:8080/');
 @Injectable({
@@ -96,8 +97,8 @@ export class ApiService {
   }
   updateSecurity(param): Observable<any> {
     // 接口未明确
-    const params = new HttpParams({ fromObject: param});
-    return this.http.post(this.baseUrl + '/admin/security/' + param.securityId, params);
+    const params = new HttpParams().set('value', param.todayPrice);
+    return this.http.post(this.baseUrl + '/admin/price/' + param.priceId, params);
   }
   delSecurity(securityId: string): Observable<any> {
     return this.http.delete(this.baseUrl + '/admin/security/' + securityId);
@@ -107,8 +108,8 @@ export class ApiService {
     // 后台未确定
     return this.http.get(this.baseUrl + '/admin/price/' + priceId);
   }
-  addPrice(param): Observable<any> {
-    const params = new HttpParams({ fromObject: param});
+  addPrice(securityId: string, value: string): Observable<any> {
+    const params = new HttpParams().set('securityId', securityId).set('value', value);
     return this.http.post(this.baseUrl + '/admin/price', params);
   }
   updatePrice(param): Observable<any> {

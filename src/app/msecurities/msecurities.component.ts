@@ -15,7 +15,7 @@ export class MsecuritiesComponent implements OnInit {
   searchtext: string;
   equity: string;
   count: number;
-  showSecurities: Security[];
+  // showSecurities: Security[];
   isVisible = false;
   isConfirmLoading = false;
   validateForm: FormGroup;
@@ -27,6 +27,18 @@ export class MsecuritiesComponent implements OnInit {
   listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
                 { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
                 { text: 'fx', value: 'fx' }];
+  showSecurities: Security[];
+  showSecurities1: Array<{ securityId: string;
+  securityName: string;
+  securityType: string;
+    // @ts-ignore
+    lastDay: Date;
+  lastPrice: number;
+    // @ts-ignore
+    today: Date;
+  todayPrice: number;
+  priceId: string;
+  [key: string]: string | number }> = new Array();
   securiries: Security[];
   portfolios: Portfolio[] = [];
   showModal2(securityId: string): void {
