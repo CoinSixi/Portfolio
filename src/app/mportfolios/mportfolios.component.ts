@@ -4,6 +4,8 @@ import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from 
 import {Observable, Observer} from 'rxjs';
 import {ManagerService} from '../manager.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import {Router} from '@angular/router';
+import {Position} from '../entities/Position';
 @Component({
   selector: 'app-mportfolios',
   templateUrl: './mportfolios.component.html',
@@ -94,7 +96,10 @@ export class MportfoliosComponent implements OnInit {
       }
     );
   }
-  constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService) {
+  goDeatil(portfolio: Portfolio): void {
+    this.router.navigate(['/manager/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName}});
+  }
+  constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService, private router: Router) {
     this.validateForm = this.fb.group({
       portfolioName: ['', [Validators.required]]
     });

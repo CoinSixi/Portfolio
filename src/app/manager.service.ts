@@ -73,4 +73,38 @@ export class ManagerService {
         });
   }
 
+  getPositions(portfolioId: string): Observable<any> {
+    const url = `${this.baseUrl}/portfolio/${portfolioId}`;
+    return this.http
+      .request('GET', url,
+        {
+          responseType: 'json',
+        });
+  }
+  deletePosition(positionId: string): Observable<any> {
+    const headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*');
+    // headers.set('Access-Control-Allow-Headers', 'X-Requested-With');
+    headers.set('Access-Control-Allow-Headers', 'Authorization, X-Requested-With, Access-Control-Allow-Methods, Access-Control-Allow-Origin');
+    headers.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+    const url = `${this.baseUrl}/position`;
+    const params = new HttpParams().set('positionId', positionId);
+    return this.http
+      .request('DELETE', url,
+        {
+          responseType: 'json',
+          params,
+          headers
+        });
+  }
+
+  updatePosition(positionId: string, quantity: number): Observable<any> {
+    const url = `${this.baseUrl}/position/${positionId}`;
+    const params = new HttpParams().set('positionId', positionId).set('quantity', String(quantity));
+    return this.http
+      .request('POST', url,
+        {
+          responseType: 'json',
+          params
+        });
+  }
 }

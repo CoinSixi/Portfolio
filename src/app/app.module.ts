@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AdminiComponent } from './admini/admini.component';
 import { ManagerComponent } from './manager/manager.component';
-import {FormsModule} from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import { DataTablesModule} from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgZorroAntdModule, NZ_I18N, en_US, NZ_ICONS } from 'ng-zorro-antd';
@@ -24,7 +24,8 @@ import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
 import {MsecuritiesComponent} from './msecurities/msecurities.component';
-
+import {G2ChartModule} from 'g2-angular';
+import F2 from '@antv/f2/build/f2';
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -55,7 +56,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BrowserAnimationsModule,
     HttpClientJsonpModule,
     ScrollingModule,
-    DragDropModule
+    DragDropModule,
+    G2ChartModule.forRoot()
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }],
   bootstrap: [AppComponent]

@@ -16,14 +16,14 @@ const managerChildRoutes: Routes = [
   {path: '', redirectTo: '/portfolios', pathMatch: 'full'},
   {path: 'portfolios', component: MportfoliosComponent},
   {path: 'securities', component: MsecuritiesComponent},
-  {path: 'portfolios/:id', component: MportfolioComponent}
+  {path: 'portfolio', component: MportfolioComponent}
 ];
 const adminChildRoutes: Routes = [
   {path: '', redirectTo: '/fund-manager', pathMatch: 'full'},
   {path: 'fund-manager', component: AfundManagersComponent},
   {path: 'securities', component: AsecuritiesComponent},
   {path: 'portfolios', component: AportfoliosComponent},
-  {path: 'portfolios/:id', component: AportfolioComponent}
+  {path: 'portfolio', component: AportfolioComponent}
 ];
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},

@@ -1,1 +1,41 @@
-<p>mportfolio works!</p>
+<canvas id="f2_c1" width="900" height="500"></canvas>
+<nz-table #basicTable [nzData]="positions">
+  <thead>
+  <tr>
+    <th>Security Name</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Operation</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of basicTable.data">
+    <td>
+      {{ data.securityId }}
+    </td>
+    <td>
+      <ng-container *ngIf="!editCache[data.positionId].edit; else phoneInputTpl">
+        {{ data.quantity }}
+      </ng-container>
+      <ng-template #phoneInputTpl>
+        <input type="number" nz-input [(ngModel)]="editCache[data.positionId].data.quantity" />
+      </ng-template>
+    </td>
+    <td>
+      {{ data.securityId }}
+    </td>
+
+    <td>
+      <ng-container *ngIf="!editCache[data.positionId].edit; else saveTpl">
+        <a (click)="startEdit(data.positionId)">Edit</a>
+      </ng-container>
+      <ng-template #saveTpl>
+        <a (click)="saveEdit(data.positionId)">Save</a>&nbsp;
+        <a nz-popconfirm nzTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.positionId)">Cancel</a>
+      </ng-template>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a (click)="deletePosition(data.positionId)">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>

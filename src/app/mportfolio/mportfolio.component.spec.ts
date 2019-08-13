@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MportfolioComponent } from './mportfolio.component';
+import { MetropolisComponent } from './mportfolio.component';
 
 describe('MportfolioComponent', () => {
-  let component: MportfolioComponent;
-  let fixture: ComponentFixture<MportfolioComponent>;
+  let component: MetropolisComponent;
+  let fixture: ComponentFixture<MetropolisComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MportfolioComponent ]
+      declarations: [ MetropolisComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MportfolioComponent);
+    fixture = TestBed.createComponent(MetropolisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
