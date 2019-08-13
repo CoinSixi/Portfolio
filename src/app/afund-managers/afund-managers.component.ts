@@ -20,26 +20,6 @@ export class AfundManagersComponent implements OnInit {
   validateForm: FormGroup;
   addUser: User = new User();
   showUser: User[];
-  listOfData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
-    }
-  ];
   showModal2(): void {
     this.isVisible = true;
 
@@ -328,6 +308,7 @@ export class AfundManagersComponent implements OnInit {
 
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
-    this.showUser = this.listUsers.filter(portfolio => portfolio.username.match(reg));
+    console.log(this.listUsers);
+    this.showUser = this.listUsers.filter(user => user.username.match(reg));
   }
 }

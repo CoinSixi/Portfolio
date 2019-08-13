@@ -18,8 +18,8 @@ export class AsecuritiesComponent implements OnInit {
   isConfirmLoading = false;
   editCache: { [key: string]: any } = {};
   validateForm: FormGroup;
-  addSecurity: Security = new Security();
-
+  addSecurityType: string;
+  addSecurityName: string;
   securiries: Security[] = [
     {
       securityId: '13515',
@@ -83,16 +83,15 @@ export class AsecuritiesComponent implements OnInit {
     this.isVisible = true;
   }
   handleOk(): void {
-    this.isConfirmLoading = true;
-    setTimeout(() => {
-      this.isVisible = false;
-      this.isConfirmLoading = false;
-    }, 3000);
-    this.addSecurity.today = new Date();
-    this.api.addSecurity(this.addSecurity).subscribe(
+    this.api.addSecurity(this.addSecurityName, this.addSecurityType).subscribe(
       response => {
         if (response.code === 200) {
           console.log('addSecurity==' + response.data.securityId);
+          this.addSecurityName = '';
+          this.addSecurityType = '';
+          this.getSecurities();
+          this.isVisible = false;
+          this.isConfirmLoading = false;
         } else {
           console.error('add security error!：' + response.msg);
         }
@@ -180,6 +179,9 @@ export class AsecuritiesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getSecurities();
+  }
+  getSecurities(): void {
     this.api.getSecurities().subscribe(
       response => {
         if (response.code === 200 ) {

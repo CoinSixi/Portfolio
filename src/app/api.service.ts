@@ -90,8 +90,8 @@ export class ApiService {
     // 后台给的url是： /admin/securiy
     return this.http.get(this.baseUrl + '/admin/security');
   }
-  addSecurity(param): Observable<any> {
-    const params = new HttpParams({ fromObject: param});
+  addSecurity(name: string, type: string): Observable<any> {
+    const params = new HttpParams().set('securityName', name).set('securityType', type);
     return this.http.post(this.baseUrl + '/admin/security', params);
   }
   updateSecurity(param): Observable<any> {
