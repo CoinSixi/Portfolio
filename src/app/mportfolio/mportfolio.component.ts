@@ -49,7 +49,10 @@ export class MportfolioComponent implements OnInit {
   chartOption: any;
   resize = (document.body.clientHeight - 181) + 'px';
   app = {};
+  myPieChart: any;
   option = null;
+  mapArray = [];
+  pieOption: any;
   priceDate = new Date();
   fetchData() {
     this.api.getHistoryPrice(this.portfolio.portfolioId).subscribe(
@@ -74,12 +77,11 @@ export class MportfolioComponent implements OnInit {
       backgroundColor: '#394056',
       title: {
         text: 'Total Price Trend',
+        left: '6%',
+        top: 20,
         textStyle: {
-          fontWeight: 'normal',
-          fontSize: 16,
-          color: '#F1F1F3'
-        },
-        left: '6%'
+          color: '#ccc'
+        }
       },
       tooltip: {
         trigger: 'axis',
@@ -172,7 +174,101 @@ export class MportfolioComponent implements OnInit {
       }, ]
     };
   }
+  showPositionPie(): void {
+    this.managerService.getPositions(this.portfolio.portfolioId).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          // console.log(response.data);
+          this.positions = response.data;
+          this.positions.forEach(tuple => {
+            const mapPie: {[key: string]: any} = {
+              name: null,
+              value: null,
+            };
+            mapPie.name = tuple.securityName;
+            mapPie.value = tuple.quantity * tuple.price;
+            this.mapArray.push(mapPie);
+          });
+          this.getPieChart();
+          this.myPieChart = echarts.init(document.getElementById('pieContainer') as HTMLDivElement);
+          this.pieOption.series[0].data = this.mapArray;
+          console.log('aa', this.pieOption.series[0].data);
+          this.myPieChart.setOption(this.pieOption);
+        } else {
+          console.error('获取饼图数据失败');
+        }
+      }
+    );
+  }
+  getPieChart() {
+    this.pieOption = {
+      backgroundColor: '#2c343c',
 
+      title: {
+        text: 'Position Pie',
+        left: '6%',
+        top: 20,
+        textStyle: {
+          color: '#ccc'
+        }
+      },
+
+      tooltip : {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
+
+      visualMap: {
+        show: false,
+        min: 80,
+        max: 600,
+        inRange: {
+          colorLightness: [0, 1]
+        }
+      },
+      series : [
+        {
+          name: 'Security Name',
+          type: 'pie',
+          radius : '55%',
+          center: ['50%', '50%'],
+          data: [].sort( (a, b) => a.value - b.value),
+          roseType: 'radius',
+          label: {
+            normal: {
+              textStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              lineStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              },
+              smooth: 0.2,
+              length: 10,
+              length2: 20
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#c23531',
+              shadowBlur: 200,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          },
+
+          animationType: 'scale',
+          animationEasing: 'elasticOut',
+          /*animationDelay: function (idx) {
+            return Math.random() * 200;
+          }*/
+        }
+      ]
+    };
+
+  }
 
   startEdit(id: string): void {
     this.editCache[id].edit = true;
@@ -216,6 +312,7 @@ export class MportfolioComponent implements OnInit {
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
     this.fetchData();
+    this.showPositionPie();
     // this.pieChart();
   }
 
