@@ -1,31 +1,39 @@
-
-<div style="width: 40%; margin-left: 30%">
-  <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
-    <input type="text" nz-input placeholder="input search text" [(ngModel)]="searchtext"  (ngModelChange)="searchText()" />
-  </nz-input-group>
-  <ng-template #suffixButton>
-    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="searchText()">Search</button>
-  </ng-template>
-</div>
-<nz-table #filterTable [nzData]="showPortfolios">
-  <thead (nzSortChange)="sort($event)" nzSingleSort>
+<div id="mountNode"></div>
+<div id="c1" ></div>
+<p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
+<nz-table #basicTable [nzData]="showPositions">
+  <thead>
   <tr>
-    <th>
-      Portfolio Name
-    </th>
-    <th>Manager</th>
-    <th>Update</th>
-    <th nzShowSort nzSortKey="age">RateDay</th>
-    <th nzShowSort nzSortKey="age">TotalRating</th>
+    <th>Security Name</th>
+    <th
+      nzShowFilter
+      [nzFilters]="listOfType"
+      (nzFilterChange)="filter($event, searchAddress)"
+    >Security Type</th>
+    <th>Quantity</th>
+    <th nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('price', $event)"
+    >Price</th>
+    <th  nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('rateTotal', $event)"
+    >Rating</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let data of filterTable.data">
-    <td>{{ data.portfolioName }}</td>
-    <td>{{ data.userName }}</td>
-    <td>{{ data.updateTime | date }}</td>
-    <td>{{ data.rateDay }}</td>
-    <td>{{ data.rateTotal }}</td>
+  <tr *ngFor="let data of basicTable.data">
+    <td>
+      {{ data.securityName }}
+    </td>
+    <td>
+      {{ data.securityType }}
+    </td>
+    <td>
+        {{ data.quantity }}
+    </td>
+    <td>
+      {{ data.price }}
+    </td>
+    <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">
+      {{data.rateTotal | percent:'1.2-3'}}
+    </td>
   </tr>
   </tbody>
 </nz-table>

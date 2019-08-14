@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Portfolio} from '../entities/Portfolio';
 import {ApiService} from '../api.service';
 import {Security} from '../entities/Security';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-aportfolios',
@@ -28,7 +29,7 @@ export class AportfoliosComponent implements OnInit {
     rateDay: null,
     rateTotal: null
   };
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit() {
     this.api.getportfolios().subscribe(
@@ -77,5 +78,9 @@ export class AportfoliosComponent implements OnInit {
     } else {
       this.showPortfolios = listOfData;
     }
+  }
+
+  goDeatil(portfolio: Portfolio): void {
+    this.router.navigate(['/administrator/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName}});
   }
 }

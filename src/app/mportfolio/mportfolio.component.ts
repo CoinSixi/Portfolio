@@ -4,6 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Portfolio} from '../entities/Portfolio';
 import {ManagerService} from '../manager.service';
 import {NzMessageService} from 'ng-zorro-antd';
+import {Security} from '../entities/Security';
 
 @Component({
   selector: 'app-mportfolio',
@@ -20,6 +21,26 @@ export class MportfolioComponent implements OnInit {
   editCache: { [key: string]: any } = {};
   portfolio: Portfolio = new Portfolio();
   positions: Position[] = [];
+  showPositions: Position[];
+  sortName: string | null = null;
+  sortValue: string | null = null;
+  searchAddress: string;
+  listOfSearchName: string[] = [];
+  listOfSearchAddress: string[] = [];
+  listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
+    { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
+    { text: 'fx', value: 'fx' }];
+  mapOfSort: { [key: string]: any } = {
+    positionId: null,
+    portfolioId: null,
+    securityId: null,
+    securityName: null,
+    securityType: null,
+    quantity: null,
+    price: null,
+    rateTotal: null,
+  };
+
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
@@ -67,7 +88,6 @@ export class MportfolioComponent implements OnInit {
       response => {
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
-          this.getPositions();
           this.message.success('Create Success!', {
             nzDuration: 10000
           });
@@ -86,6 +106,7 @@ export class MportfolioComponent implements OnInit {
         if (response.code === 200 ) {
           console.log(response.data);
           this.positions = response.data;
+          this.showPositions = this.positions;
           this.updateEditCache();
           // this.chartData();
         } else {
@@ -103,7 +124,9 @@ export class MportfolioComponent implements OnInit {
         console.log(response);
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
-          this.getPositions();
+          this.positions = this.positions.filter(item => item.positionId !== positionId);
+          this.showPositions = this.positions;
+          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
           this.message.success('Delete Success!', {
             nzDuration: 10000
           });
@@ -114,6 +137,56 @@ export class MportfolioComponent implements OnInit {
         }
       }
     );
+  }
+  filter(listOfSearchName: string[], searchAddress: string): void {
+    this.listOfSearchName = listOfSearchName;
+    this.searchAddress = searchAddress;
+    // this.search();
+    console.log(listOfSearchName);
+    console.log(this.positions);
+    if (this.listOfSearchName.length > 0) {
+      this.showPositions = this.positions.filter(item => {
+        for ( const i of listOfSearchName) {
+          if (item.securityType === i) {
+            return true;
+          }
+        }
+        return  false;
+      });
+    }
+    console.log(this.showPositions);
+  }
+  sort(sortName: string, value: string): void {
+    this.sortName = sortName;
+    this.sortValue = value;
+    for (const key in this.mapOfSort) {
+      this.mapOfSort[key] = key === sortName ? value : null;
+    }
+    this.search(this.listOfSearchName, this.listOfSearchAddress);
+  }
+  search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
+    this.listOfSearchName = listOfSearchName;
+    this.listOfSearchAddress = listOfSearchAddress;
+    console.log(this.listOfSearchAddress);
+    const filterFunc = (item: Position) =>
+      (this.listOfSearchAddress.length
+        ? this.listOfSearchAddress.some(address => item.securityType.indexOf(address) !== -1)
+        : true);
+    const listOfData = this.showPositions.filter((item: Position) => filterFunc(item));
+    console.log(listOfData);
+    if (this.sortName && this.sortValue) {
+      this.showPositions = listOfData.sort((a, b) =>
+        this.sortValue === 'ascend'
+          ? a[this.sortName!] > b[this.sortName!]
+          ? 1
+          : -1
+          : b[this.sortName!] > a[this.sortName!]
+          ? 1
+          : -1
+      );
+    } else {
+      this.showPositions = listOfData;
+    }
   }
   /*chartData() {
     const data = [

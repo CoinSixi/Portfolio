@@ -1,15 +1,20 @@
 <div id="mountNode"></div>
 <div id="c1" ></div>
 <p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
-<nz-table #basicTable [nzData]="positions">
+<nz-table #basicTable [nzData]="showPositions">
   <thead>
   <tr>
     <th>Security Name</th>
     <th
-      nzShowSort
-      nzSortKey="quantity">Quantity</th>
-    <th>Price</th>
-    <th>Rating</th>
+      nzShowFilter
+      [nzFilters]="listOfType"
+      (nzFilterChange)="filter($event, searchAddress)"
+    >Security Type</th>
+    <th>Quantity</th>
+    <th nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('price', $event)"
+    >Price</th>
+    <th  nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('rateTotal', $event)"
+    >Rating</th>
     <th>Operation</th>
   </tr>
   </thead>
@@ -17,6 +22,9 @@
   <tr *ngFor="let data of basicTable.data">
     <td>
       {{ data.securityName }}
+    </td>
+    <td>
+      {{ data.securityType }}
     </td>
     <td>
       <ng-container *ngIf="!editCache[data.positionId].edit; else phoneInputTpl">
