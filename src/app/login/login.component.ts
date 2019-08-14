@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
 import {ApiService} from '../api.service';
 import {NzMentionService, NzMessageBaseService, NzMessageModule, NzMessageService} from 'ng-zorro-antd';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -9,17 +10,30 @@ import {NzMentionService, NzMessageBaseService, NzMessageModule, NzMessageServic
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(public router: Router, private apiService: ApiService, private message: NzMessageService) { }
+  constructor(public router: Router, private apiService: ApiService, private message: NzMessageService, private fb: FormBuilder) { }
   username: string;
   password: string;
   text1: string;
   checked = false;
+  validateForm: FormGroup;
+
+  submitForm(): void {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
+    }
+  }
 
   ngOnInit() {
     if (window.localStorage.getItem('username') !== null && window.localStorage.getItem('password') !== null) {
       this.username = window.localStorage.getItem('username');
       this.password = window.localStorage.getItem('password');
     }
+    this.validateForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      remember: [true]
+    });
   }
   signIn(): void {
     this.apiService.login(this.username, this.password).subscribe(
