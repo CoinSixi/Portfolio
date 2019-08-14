@@ -54,7 +54,6 @@ export class MportfolioComponent implements OnInit {
   }
 
   saveEdit(id: string): void {
-    alert(id);
     const index = this.positions.findIndex(item => item.positionId === id);
     Object.assign(this.positions[index], this.editCache[id].data);
     this.editCache[id].edit = false;

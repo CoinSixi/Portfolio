@@ -34,7 +34,7 @@
     <td>
       {{ data.securityType }}
     </td>
-    <td>
+    <td nz-popover [nzTitle]="titleTemplate" [nzContent]="contentTemplate" (click)="selectS(data)">
       <ng-container *ngIf="!editCache[data.securityId].edit; else passwordInputTpl">
         {{ data.todayPrice }}
       </ng-container>
@@ -55,6 +55,8 @@
         <a (click)="saveEdit(data.securityId)">Save</a>&nbsp;
         <a nz-popconfirm nzTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.securityId)">Cancel</a>
       </ng-template>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a (click)="showModal3(data.securityId)">Upload</a>
     </td>
   </tr>
   </tbody>
@@ -93,3 +95,40 @@
     <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Submit</button>
   </div>
 </nz-modal>
+
+<nz-modal [(nzVisible)]="isVisible1" nzTitle="Upload File" (nzOnCancel)="handleCancel()">
+  <div>
+    <nz-upload
+      nzType="drag"
+      [nzMultiple]="true"
+      [(nzFileList)]="fileList"
+      [nzLimit]="1"
+      [nzBeforeUpload]="beforeUpload"
+    >
+      <p class="ant-upload-drag-icon">
+        <i nz-icon nzType="inbox"></i>
+      </p>
+      <p class="ant-upload-text">Click or drag file to this area to upload</p>
+      <p class="ant-upload-hint">
+        Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+      </p>
+    </nz-upload>
+    <input style="width: 45%; margin-top: 15px;" nz-input placeholder="securityDate field" [(ngModel)]="securityDateFeild" />
+    <input style="width: 45%; margin-top: 15px; margin-left: 10%" nz-input placeholder="securityPrice field" [(ngModel)]="securityValueFeild" />
+
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+    <button nz-button nzType="primary" [nzLoading]="isConfirmLoading"
+            [nzLoading]="uploading"
+            (click)="handleUpload()"
+            [disabled]="fileList.length == 0 || !securityDateFeild || !securityValueFeild">Submit</button>
+  </div>
+</nz-modal>
+<button nz-button nz-popover [nzTitle]="titleTemplate" [nzContent]="contentTemplate">
+  Render Template
+</button>
+<ng-template #titleTemplate>{{select.securityName==null? 'Security': select.securityName}}</ng-template>
+<ng-template #contentTemplate>
+  <app-security-chart></app-security-chart>
+</ng-template>

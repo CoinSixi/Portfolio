@@ -3,7 +3,8 @@ import {Security} from '../entities/Security';
 import {FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {Observable, Observer} from 'rxjs';
 import {ApiService} from '../api.service';
-import {User} from '../entities/User';
+import {NzMessageService, UploadFile} from 'ng-zorro-antd';
+import { SecurityChartComponent} from '../security-chart/security-chart.component';
 
 @Component({
   selector: 'app-asecurities',
@@ -16,6 +17,8 @@ export class AsecuritiesComponent implements OnInit {
   showSecurities: Security[];
   isVisible = false;
   isConfirmLoading = false;
+  isVisible1 = false;
+  isConfirmLoading1 = false;
   editCache: { [key: string]: any } = {};
   validateForm: FormGroup;
   addSecurityType: string;
@@ -38,6 +41,14 @@ export class AsecuritiesComponent implements OnInit {
     todayPrice: null,
     priceId: null
   };
+
+  uploading = false;
+  fileList: UploadFile[] = [];
+  selectSecurity: string;
+  securityDateFeild: string;
+  securityValueFeild: string;
+
+  select: Security = new Security();
   securiries: Security[] = [
     {
       securityId: 'string',
@@ -53,25 +64,38 @@ export class AsecuritiesComponent implements OnInit {
   showModal2(): void {
     this.isVisible = true;
   }
+  showModal3(selectSecurity: string): void {
+    this.isVisible1 = true;
+    this.selectSecurity = selectSecurity;
+  }
   handleOk(): void {
     this.api.addSecurity(this.addSecurityName, this.addSecurityType).subscribe(
       response => {
         if (response.code === 200) {
-          console.log('addSecurity==' + response.data.securityId);
+          this.message.success('Add security success', {
+            nzDuration: 2000
+          });
           this.addSecurityName = '';
           this.addSecurityType = '';
           this.getSecurities();
           this.isVisible = false;
           this.isConfirmLoading = false;
         } else {
-          console.error('add security error!：' + response.msg);
+          this.message.error('Add security error:' + response.msg, {
+            nzDuration: 2000
+          });
         }
       }
     );
   }
+  handleOk1(): void {
+    this.isVisible1 = false;
+    this.isConfirmLoading1 = false;
+  }
 
   handleCancel(): void {
     this.isVisible = false;
+    this.isVisible1 = false;
   }
   startEdit(id: string): void {
     this.editCache[id].edit = true;
@@ -94,7 +118,7 @@ export class AsecuritiesComponent implements OnInit {
       this.api.updateSecurity(this.editCache[id].data).subscribe(
         response => {
           if (response.code === 200 ) {
-            this.filter(this.listOfSearchName, '');
+            this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
             console.log('securityId:' + response.data.userId + ',update security success!');
           } else {
             console.error(response.msg + ': update security error!');
@@ -105,7 +129,7 @@ export class AsecuritiesComponent implements OnInit {
       this.api.addPrice(this.editCache[id].data.securityId, this.editCache[id].data.todayPrice).subscribe(
         response => {
           if (response.code === 200 ) {
-            this.getSecurities();
+            this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
             console.log('securityId:' + response.data.userId + ',update security success!');
           } else {
             console.error(response.msg + ': update security error!');
@@ -121,9 +145,13 @@ export class AsecuritiesComponent implements OnInit {
         console.log(response);
         if (response.code === 200 ) {
           // const data = response.data;
-          console.log('delete security success!');
+          this.message.success('Delete security success', {
+            nzDuration: 2000
+          });
         } else {
-          console.log('delete security error!');
+          this.message.error('Delete security error:' + response.msg, {
+            nzDuration: 2000
+          });
         }
 
       }
@@ -205,7 +233,7 @@ export class AsecuritiesComponent implements OnInit {
       this.showSecurities = listOfData;
     }
   }
-  constructor(private fb: FormBuilder, private api: ApiService) {
+  constructor(private fb: FormBuilder, private api: ApiService, private message: NzMessageService) {
     this.validateForm = this.fb.group({
     securityName: ['', [Validators.required], [this.userNameAsyncValidator]],
     type: ['', [Validators.required]]
@@ -225,12 +253,37 @@ export class AsecuritiesComponent implements OnInit {
           console.log( 'get securities success！');
           console.log(this.showSecurities);
         } else {
-          console.error( 'get securities error!');
+          this.message.error('Get Securities Failure:' + response.msg, {
+            nzDuration: 2000
+          });
         }
       });
   }
   searchText(): void {
     const reg = '.*' + this.searchtext.toString();
     this.showSecurities = this.securiries.filter(portfolio => portfolio.securityName.match(reg));
+  }
+  beforeUpload = (file: UploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  }
+  handleUpload(): void {
+    this.handleOk1();
+    console.log(this.fileList);
+    this.api.uploadFile(this.selectSecurity, this.fileList[0], this.securityDateFeild, this.securityValueFeild).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          this.message.success('Upload Success', {
+            nzDuration: 2000
+          });
+        } else {
+          this.message.error('Upload Failure:' + response.msg, {
+            nzDuration: 2000
+          });
+        }
+      });
+  }
+  selectS(security: Security): void {
+    this.select = security;
   }
 }
