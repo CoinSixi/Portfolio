@@ -15,7 +15,6 @@ export class MsecuritiesComponent implements OnInit {
   searchtext: string;
   equity: string;
   count: number;
-  // showSecurities: Security[];
   isVisible = false;
   isConfirmLoading = false;
   validateForm: FormGroup;
@@ -27,18 +26,18 @@ export class MsecuritiesComponent implements OnInit {
   listOfType = [{ text: 'equity', value: 'equity' }, { text: 'future', value: 'future' },
                 { text: 'index', value: 'index' }, { text: 'commodity', value: 'commodity' },
                 { text: 'fx', value: 'fx' }];
+  listOfSearchAddress: string[] = [];
+  mapOfSort: { [key: string]: any } = {
+    securityId: null,
+    securityName: null,
+    securityType: null,
+    lastDay: null,
+    lastPrice: null,
+    today: null,
+    todayPrice: null,
+    priceId: null
+  };
   showSecurities: Security[];
-  showSecurities1: Array<{ securityId: string;
-  securityName: string;
-  securityType: string;
-    // @ts-ignore
-    lastDay: Date;
-  lastPrice: number;
-    // @ts-ignore
-    today: Date;
-  todayPrice: number;
-  priceId: string;
-  [key: string]: string | number }> = new Array();
   securiries: Security[];
   portfolios: Portfolio[] = [];
   showModal2(securityId: string): void {
@@ -71,6 +70,7 @@ export class MsecuritiesComponent implements OnInit {
 
   ngOnInit() {
     this.getSecuritis();
+    this.getPortfolios();
     // this.showSecurities = this.securiries;
   }
   searchText(): void {
@@ -82,12 +82,11 @@ export class MsecuritiesComponent implements OnInit {
     this.managerService.getSecurityList().subscribe(
       response => {
         if (response.code === 200 ) {
-          console.log(response.data)
           this.securiries = response.data;
           this.showSecurities = response.data;
         } else {
           this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         }
       }
@@ -98,18 +97,17 @@ export class MsecuritiesComponent implements OnInit {
     const portfolioId = this.portfolios.filter(item => item.portfolioName === this.equity)[0].portfolioId;
     this.managerService.addPosition(portfolioId, this.selectSecurityId, this.count).subscribe(
       response => {
-        console.log(response);
         if (response.code === 200 ) {
           this.equity = '';
           this.count = 0;
-          this.getSecuritis();
           this.handleOk();
+          this.filter(this.listOfSearchName, '');
           this.message.success('Create Success!', {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         } else {
           this.message.error('Create Failure:' + response.msg, {
-            nzDuration: 10000
+            nzDuration: 2000
           });
         }
       }
@@ -141,15 +139,26 @@ export class MsecuritiesComponent implements OnInit {
     });
     console.log(this.showSecurities);
   }
-  search(): void {
-    /** filter data **/
+  sort(sortName: string, value: string): void {
+    this.sortName = sortName;
+    this.sortValue = value;
+    for (const key in this.mapOfSort) {
+      this.mapOfSort[key] = key === sortName ? value : null;
+    }
+    this.search(this.listOfSearchName, this.listOfSearchAddress);
+  }
+  search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
+    this.listOfSearchName = listOfSearchName;
+    this.listOfSearchAddress = listOfSearchAddress;
+    console.log(this.listOfSearchAddress);
     const filterFunc = (item: Security) =>
-      (this.searchAddress ? item.securityName.indexOf(this.searchAddress) !== -1 : true) &&
-      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.securityName.indexOf(name) !== -1) : true);
-    const data = this.securiries.filter(item => filterFunc(item));
-    /** sort data **/
+      (this.listOfSearchAddress.length
+        ? this.listOfSearchAddress.some(address => item.securityType.indexOf(address) !== -1)
+        : true);
+    const listOfData = this.showSecurities.filter((item: Security) => filterFunc(item));
+    console.log(listOfData);
     if (this.sortName && this.sortValue) {
-      this.showSecurities = data.sort((a, b) =>
+      this.showSecurities = listOfData.sort((a, b) =>
         this.sortValue === 'ascend'
           ? a[this.sortName!] > b[this.sortName!]
           ? 1
@@ -159,7 +168,7 @@ export class MsecuritiesComponent implements OnInit {
           : -1
       );
     } else {
-      this.showSecurities = data;
+      this.showSecurities = listOfData;
     }
   }
 

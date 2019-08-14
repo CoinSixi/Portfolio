@@ -18,8 +18,7 @@
       (nzFilterChange)="filter($event, searchAddress)"
     >Security Type</th>
     <th
-      nzShowSort
-      nzSortKey="price"
+      nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('todayPrice', $event)"
     >Price</th>
     <th>Date</th>
     <th>Operation</th>
@@ -51,7 +50,7 @@
   <div>
     <form nz-form [formGroup]="validateForm">
       <nz-form-item>
-        <nz-form-label [nzSpan]="7" nzRequired>Security Type</nz-form-label>
+        <nz-form-label [nzSpan]="7" nzRequired>Portfolio Name</nz-form-label>
         <nz-form-control [nzSpan]="12">
           <nz-select [(ngModel)]="equity" nz-input formControlName="portfolio">
             <nz-option [nzLabel]="portfolio.portfolioName" [nzValue]="portfolio.portfolioName" *ngFor="let portfolio of portfolios"></nz-option>

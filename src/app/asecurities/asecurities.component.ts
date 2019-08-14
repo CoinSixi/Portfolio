@@ -94,7 +94,7 @@ export class AsecuritiesComponent implements OnInit {
       this.api.updateSecurity(this.editCache[id].data).subscribe(
         response => {
           if (response.code === 200 ) {
-            this.getSecurities();
+            this.filter(this.listOfSearchName, '');
             console.log('securityId:' + response.data.userId + ',update security success!');
           } else {
             console.error(response.msg + ': update security error!');
@@ -184,12 +184,13 @@ export class AsecuritiesComponent implements OnInit {
   search(listOfSearchName: string[], listOfSearchAddress: string[]): void {
     this.listOfSearchName = listOfSearchName;
     this.listOfSearchAddress = listOfSearchAddress;
+    console.log(this.listOfSearchAddress);
     const filterFunc = (item: Security) =>
       (this.listOfSearchAddress.length
-        ? this.listOfSearchAddress.some(address => item.address.indexOf(address) !== -1)
-        : true) &&
-      (this.listOfSearchName.length ? this.listOfSearchName.some(name => item.name.indexOf(name) !== -1) : true);
-    const listOfData = this.securiries.filter((item: Security) => filterFunc(item));
+        ? this.listOfSearchAddress.some(address => item.securityType.indexOf(address) !== -1)
+        : true);
+    const listOfData = this.showSecurities.filter((item: Security) => filterFunc(item));
+    console.log(listOfData);
     if (this.sortName && this.sortValue) {
       this.showSecurities = listOfData.sort((a, b) =>
         this.sortValue === 'ascend'
