@@ -81,6 +81,6 @@ export class AportfoliosComponent implements OnInit {
   }
 
   goDeatil(portfolio: Portfolio): void {
-    this.router.navigate(['/administrator/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName}});
+    this.router.navigate(['/administrator/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName, rateTotal: portfolio.rateTotal, manager: portfolio.userName}});
   }
 }

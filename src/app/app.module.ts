@@ -24,9 +24,9 @@ import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
 import {MsecuritiesComponent} from './msecurities/msecurities.component';
+import { SecurityChartComponent} from './security-chart/security-chart.component';
 import {NgxEchartsModule} from 'ngx-echarts';
 import * as G2 from '@antv/g2';
-import { ChartComponent } from './chart/chart.component';
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -46,7 +46,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     MportfolioComponent,
     AportfolioComponent,
     MsecuritiesComponent,
-    ChartComponent,
+    SecurityChartComponent
   ],
   imports: [
     BrowserModule,

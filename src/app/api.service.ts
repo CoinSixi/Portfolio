@@ -1,10 +1,11 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core';
-import {HttpClient, HttpParams, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpHeaders, HttpRequest, HttpResponse} from '@angular/common/http';
 import 'rxjs';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import {NzNotificationService, UploadFile} from 'ng-zorro-antd';
+import {NzMessageService, NzNotificationService, UploadFile} from 'ng-zorro-antd';
 import set = Reflect.set;
+import {filter} from 'rxjs/operators';
 
 // export const API_URL = new InjectionToken<string>('117.78.11.72:8080/');
 @Injectable({
@@ -20,6 +21,7 @@ export class ApiService {
     // @Inject(API_URL) public urlPrefix,
     private router: Router,
     private notification: NzNotificationService,
+    private message: NzMessageService
   ) {
   }
 
@@ -151,7 +153,7 @@ export class ApiService {
       withCredentials: true
     });
   }*/
-  uploadFile(securityId: string, file: UploadFile, dateName: string, priceName: string): Observable<any> {
+  uploadFile(securityId: string, file: UploadFile, dateName: string, priceName: string): any {
     const formData = new FormData();
     // @ts-ignore
     formData.append('file', file);
@@ -160,10 +162,33 @@ export class ApiService {
     const req = new HttpRequest('POST', this.baseUrl + '/security/upload/' + securityId, formData, {
       // reportProgress: true
     });
-    return this.http.request(req);
+    this.http
+      .request(req)
+      .pipe(filter(e => e instanceof HttpResponse))
+      .subscribe(
+        response => {
+          console.log(response);
+          console.log(response.body.data);
+          this.message.success('Upload ' + response.body.data + ' days data!');
+        },
+        response => {
+          this.message.error('Upload Failure!');
+        }
+      );
+    /*this.http.request(req).subscribe(
+      response => {
+        console.log(response);
+        console.log(response.body.data);
+        return response.body.data;
+      }
+    );*/
   }
 
   getHistoryPrice(portfolioId: string): Observable<any>  {
     return this.http.get(this.baseUrl + '/portfolio/history/' + portfolioId);
+  }
+
+  getHistorySecurity(securityId: string): Observable<any> {
+    return this.http.get(this.baseUrl + '/security/' + securityId)
   }
 }

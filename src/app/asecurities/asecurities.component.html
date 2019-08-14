@@ -28,13 +28,13 @@
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
-    <td>
+    <td class="portfolio-name" (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">
       {{ data.securityName }}
     </td>
     <td>
       {{ data.securityType }}
     </td>
-    <td nz-popover [nzTitle]="titleTemplate" [nzContent]="contentTemplate" (click)="selectS(data)">
+    <td>
       <ng-container *ngIf="!editCache[data.securityId].edit; else passwordInputTpl">
         {{ data.todayPrice }}
       </ng-container>
@@ -125,10 +125,11 @@
             [disabled]="fileList.length == 0 || !securityDateFeild || !securityValueFeild">Submit</button>
   </div>
 </nz-modal>
-<button nz-button nz-popover [nzTitle]="titleTemplate" [nzContent]="contentTemplate">
-  Render Template
-</button>
-<ng-template #titleTemplate>{{select.securityName==null? 'Security': select.securityName}}</ng-template>
+<!--<nz-modal [(nzVisible)]="isVisible2" nzTitle="{{select.securityName}}" (nzOnCancel)="handleCancel()">
+  <div>
+    <div echarts [options]="chartOption" class="line" style="height: 200px"></div>
+  </div>
+</nz-modal>-->
 <ng-template #contentTemplate>
-  <app-security-chart></app-security-chart>
+  <div echarts [options]="chartOption" class="line" style="height: 450px; width: 700px;"></div>
 </ng-template>

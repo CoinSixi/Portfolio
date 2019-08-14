@@ -1,5 +1,4 @@
-<div id="mountNode"></div>
-<div id="c1" ></div>
+
 <div echarts [options]="chartOption" class="line" style="height: 200px"></div>
 <div id="pieContainer" style="height: 200px"></div>
 <p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
@@ -16,13 +15,13 @@
     <th nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('price', $event)"
     >Price</th>
     <th  nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('rateTotal', $event)"
-    >Rating</th>
+    >Performance</th>
     <th>Operation</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
-    <td>
+    <td >
       {{ data.securityName }}
     </td>
     <td>
