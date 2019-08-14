@@ -103,7 +103,7 @@ export class MportfolioComponent implements OnInit {
         console.log(response);
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
-          this.positions.filter(portfolio => portfolio.positionId !== positionId);
+          this.getPositions();
           this.message.success('Delete Success!', {
             nzDuration: 10000
           });

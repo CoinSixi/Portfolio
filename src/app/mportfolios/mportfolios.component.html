@@ -28,8 +28,8 @@
   <tbody>
   <tr *ngFor="let data of basicTable.data">
     <td class="portfolio-name" (click)="goDeatil(data)">{{ data.portfolioName }}</td>
-    <td>{{ data.createTime | date }}</td>
-    <td>{{ data.updateTime | date }}</td>
+    <td>{{ data.createTime | date: 'yyyy-MM-dd'  }}</td>
+    <td>{{ data.updateTime | date: 'yyyy-MM-dd'  }}</td>
     <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
     <td>

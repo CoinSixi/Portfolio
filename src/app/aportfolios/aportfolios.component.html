@@ -27,7 +27,7 @@
   <tr *ngFor="let data of filterTable.data">
     <td>{{ data.portfolioName }}</td>
     <td>{{ data.userName }}</td>
-    <td>{{ data.updateTime | date }}</td>
+    <td>{{ data.updateTime | date: 'yyyy-MM-dd' }}</td>
     <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
   </tr>
