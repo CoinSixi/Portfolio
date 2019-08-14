@@ -162,4 +162,8 @@ export class ApiService {
     });
     return this.http.request(req);
   }
+
+  getHistoryPrice(portfolioId: string): Observable<any>  {
+    return this.http.get(this.baseUrl + '/portfolio/history/' + portfolioId);
+  }
 }

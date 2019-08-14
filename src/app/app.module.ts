@@ -15,7 +15,7 @@ import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { registerLocaleData } from '@angular/common';
+import {DatePipe, registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import { AfundManagersComponent } from './afund-managers/afund-managers.component';
 import { AsecuritiesComponent } from './asecurities/asecurities.component';
@@ -24,8 +24,9 @@ import { MportfoliosComponent } from './mportfolios/mportfolios.component';
 import { MportfolioComponent } from './mportfolio/mportfolio.component';
 import { AportfolioComponent } from './aportfolio/aportfolio.component';
 import {MsecuritiesComponent} from './msecurities/msecurities.component';
+import {NgxEchartsModule} from 'ngx-echarts';
 import * as G2 from '@antv/g2';
-import { SecurityChartComponent } from './security-chart/security-chart.component';
+import { ChartComponent } from './chart/chart.component';
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -45,7 +46,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     MportfolioComponent,
     AportfolioComponent,
     MsecuritiesComponent,
-    SecurityChartComponent,
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,9 +59,10 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     BrowserAnimationsModule,
     HttpClientJsonpModule,
     ScrollingModule,
-    DragDropModule
+    DragDropModule,
+    NgxEchartsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }],
+  providers: [{ provide: NZ_I18N, useValue: en_US }, { provide: NZ_ICONS, useValue: icons }, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
