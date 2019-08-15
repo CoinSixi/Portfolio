@@ -50,9 +50,11 @@ export class MportfolioComponent implements OnInit {
   resize = (document.body.clientHeight - 181) + 'px';
   app = {};
   myPieChart: any;
+  myBarhart: any;
   option = null;
   mapArray = [];
   pieOption: any;
+  barOption: any;
   priceDate = new Date();
   fetchData() {
     this.api.getHistoryPrice(this.portfolio.portfolioId).subscribe(
@@ -190,12 +192,14 @@ export class MportfolioComponent implements OnInit {
       }, ]
     };
   }
-  showPositionPie(): void {
+  showPositionPieAndBarChart(): void {
     this.managerService.getPositions(this.portfolio.portfolioId).subscribe(
       response => {
         if (response.code === 200 ) {
           // console.log(response.data);
           this.positions = response.data;
+          this.getPieChartOption();
+          this.getBarChartOption();
           this.positions.forEach(tuple => {
             const mapPie: {[key: string]: any} = {
               name: null,
@@ -204,83 +208,61 @@ export class MportfolioComponent implements OnInit {
             mapPie.name = tuple.securityName;
             mapPie.value = tuple.quantity * tuple.price;
             this.mapArray.push(mapPie);
+            this.barOption.xAxis[0].data.push(tuple.securityName);
+            this.barOption.series[0].data.push(tuple.quantity);
           });
-          this.getPieChart();
           this.myPieChart = echarts.init(document.getElementById('pieContainer') as HTMLDivElement);
+          this.myBarhart = echarts.init(document.getElementById('barContainer') as HTMLDivElement);
           this.pieOption.series[0].data = this.mapArray;
-          console.log('aa', this.pieOption.series[0].data);
           this.myPieChart.setOption(this.pieOption);
+          console.log('aaaaa:', this.barOption.series[0].data);
+          this.myBarhart.setOption(this.barOption);
         } else {
-          console.error('获取饼图数据失败');
+          console.error('获取饼图直方图数据失败！');
         }
       }
     );
   }
-  /*getPieChart() {
-    this.pieOption = {
-      title: {
-        text: 'Position Pie',
-        left: '40%',
-        top: 20,
-        textStyle: {
-          color: '#2c3e50'
-        }
-      },
+  getBarChartOption() {
+    this.barOption = {
+      color: ['#3398DB'],
       tooltip : {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)'
-      },
-      visualMap: {
-        show: false,
-        min: 80,
-        max: 600,
-        inRange: {
-          colorLightness: [0, 1]
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+          type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
         }
       },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis : [
+        {
+          type : 'category',
+          data : [],
+          axisTick: {
+            alignWithLabel: true
+          }
+        }
+      ],
+      yAxis : [
+        {
+          type : 'value'
+        }
+      ],
       series : [
         {
-          name: 'Security Name',
-          type: 'pie',
-          data: [].sort( (a, b) => a.value - b.value),
-          roseType: 'radius',
-          clockwise: true,
-          label: {
-            normal: {
-              textStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
-              }
-            }
-          },
-          labelLine: {
-            normal: {
-              lineStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
-              }
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [{
-                  offset: 0, color: 'red' // 0% 处的颜色
-                }, {
-                  offset: 1, color: 'blue' // 100% 处的颜色
-                }],
-                global: false // 缺省为 false
-              }
-            }
-          }
+          name: 'quantity',
+          type: 'bar',
+          barWidth: '60%',
+          data: []
         }
       ]
     };
-  }*/
-  getPieChart() {
+  }
+  getPieChartOption() {
     this.pieOption = {
       title: {
         text: 'Position Pie',
@@ -388,7 +370,7 @@ export class MportfolioComponent implements OnInit {
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
     this.fetchData();
-    this.showPositionPie();
+    this.showPositionPieAndBarChart();
     // this.pieChart();
   }
 

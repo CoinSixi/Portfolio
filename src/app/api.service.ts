@@ -191,6 +191,6 @@ export class ApiService {
   }
 
   getHistorySecurity(securityId: string): Observable<any> {
-    return this.http.get(this.baseUrl + '/security/' + securityId)
+    return this.http.get(this.baseUrl + '/security/' + securityId);
   }
 }
