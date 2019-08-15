@@ -94,12 +94,12 @@ export class MportfolioComponent implements OnInit {
     this.chartOption = {
       title: {
         text: 'Total Price Trend',
+        left: 'center',
+        top: 10,
+        bottom: 10,
         textStyle: {
-          fontWeight: 'normal',
-          fontSize: 16,
           color: '#2c3e50'
-        },
-        left: '45%'
+        }
       },
       tooltip: {
         trigger: 'axis',
@@ -190,7 +190,7 @@ export class MportfolioComponent implements OnInit {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
               offset: 0,
-              color: '#1890ff'
+              color: '#3398DB'
             }, {
               offset: 0.8,
               color: 'rgba(219, 50, 51, 0)'
@@ -201,7 +201,7 @@ export class MportfolioComponent implements OnInit {
         },
         itemStyle: {
           normal: {
-            color: '#1890ff'
+            color: '#3398DB'
           }
         },
         data: []
@@ -335,7 +335,7 @@ export class MportfolioComponent implements OnInit {
           },
           itemStyle: {
             normal: {
-              color: '#1890ff',
+              color: '#3398DB',
             },
             shadowColor: 'rgba(0, 0, 0, 0.5)',
             shadowBlur: 10
@@ -517,20 +517,25 @@ export class MportfolioComponent implements OnInit {
   ngOnInit() {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
+    this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
+    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.userName;
     this.getPositions();
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
-    this.fetchData();
-    this.showPositionPieAndBarChart();
     // this.pieChart();
   }
 
   updatePosition(positionId: string): void {
-    console.log(this.editCache[positionId].data.quantity);
-    this.managerService.updatePosition(positionId, this.editCache[positionId].data.quantity).subscribe(
+    console.log(positionId);
+    console.log(this.editCache[positionId].data.portfolioId);
+
+    this.managerService.updatePosition(this.editCache[positionId].data.portfolioId, positionId, this.editCache[positionId].data.quantity).subscribe(
       response => {
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
+          this.mapArray = [];
+          this.barOption.xAxis[0].data = [];
+          this.barOption.series[0].data = [];
           this.getPositions();
           this.message.success('Update Success!', {
             nzDuration: 2000
@@ -552,6 +557,7 @@ export class MportfolioComponent implements OnInit {
           this.positions = response.data;
           this.showPositions = this.positions;
           this.updateEditCache();
+          this.fetchData();
           this.showPositionPieAndBarChart();
           // this.chartData();
         } else {

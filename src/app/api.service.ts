@@ -24,6 +24,18 @@ export class ApiService {
     private message: NzMessageService
   ) {
   }
+  goLogin(response: any): Observable<any> {
+    alert(1);
+    response.subscribe(
+      res => {
+        console.log(res);
+        if (res.data === 401) {
+          this.router.navigate(['/login']);
+        } else {
+        }
+      });
+    return response;
+  }
 
   hearders() {
     const hearders = {
@@ -56,7 +68,6 @@ export class ApiService {
       case '401401':
         // this.tokenService.clear();
         this.router.navigateByUrl('usr/login');
-
     }
   }
 

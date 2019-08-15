@@ -1,4 +1,11 @@
-
+<p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}
+  <nz-divider nzType="vertical"></nz-divider>
+  Manager:{{portfolio.userName}}
+  <nz-divider nzType="vertical"></nz-divider>
+  Portfolio Performance:<span
+    [ngClass]="{'color-red': portfolio.rateTotal>0, 'color-green': portfolio.rateTotal<0}">
+    {{portfolio.rateTotal | percent:'1.2-3'}}</span>
+</p>
 <div echarts [options]="chartOption" class="line" style="width: 100%; height: 300px; padding-bottom: 10px;background-color: #F0F2F5"></div>
 <div style="width: 100%; height: 20px;background-color: #FFF"></div>
 <div style="width: 49%; height: 200px; float: left; background-color: #F0F2F5">
@@ -7,7 +14,6 @@
 <div style="width: 49%; height: 200px; float: left; background-color: #F0F2F5; margin-left: 2%">
   <div id="barContainer" style="height: 200px; width: 100%;"></div>
 </div>
-<p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
 <nz-table #basicTable [nzData]="showPositions">
   <thead>
   <tr>

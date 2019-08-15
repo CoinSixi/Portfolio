@@ -95,12 +95,12 @@ export class AportfolioComponent implements OnInit {
     this.chartOption = {
       title: {
         text: 'Total Price Trend',
+        left: 'center',
+        top: 10,
+        bottom: 10,
         textStyle: {
-          fontWeight: 'normal',
-          fontSize: 16,
           color: '#2c3e50'
-        },
-        left: '45%'
+        }
       },
       tooltip: {
         trigger: 'axis',
@@ -336,7 +336,7 @@ export class AportfolioComponent implements OnInit {
           },
           itemStyle: {
             normal: {
-              color: '#1890ff',
+              color: '#3398DB',
             },
             shadowColor: 'rgba(0, 0, 0, 0.5)',
             shadowBlur: 10
@@ -489,31 +489,12 @@ export class AportfolioComponent implements OnInit {
   ngOnInit() {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
+    this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
+    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.userName;
     this.getPositions();
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
-    this.fetchData();
-    this.showPositionPieAndBarChart();
     // this.pieChart();
-  }
-
-  updatePosition(positionId: string): void {
-    console.log(this.editCache[positionId].data.quantity);
-    this.managerService.updatePosition(positionId, this.editCache[positionId].data.quantity).subscribe(
-      response => {
-        if (response.code === 200 ) {
-          const port: Portfolio = response.data;
-          this.getPositions();
-          this.message.success('Update Success!', {
-            nzDuration: 2000
-          });
-        } else {
-          this.message.error('Update Failure:' + response.msg, {
-            nzDuration: 2000
-          });
-        }
-      }
-    );
   }
 
   getPositions(): void {
@@ -523,31 +504,13 @@ export class AportfolioComponent implements OnInit {
           console.log(response.data);
           this.positions = response.data;
           this.showPositions = this.positions;
+          console.log(this.positions);
+          this.showChart();
+          this.fetchData();
           this.showPositionPieAndBarChart();
           // this.chartData();
         } else {
           this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 10000
-          });
-        }
-      }
-    );
-  }
-
-  deletePosition(positionId: string): void {
-    this.managerService.deletePosition(positionId).subscribe(
-      response => {
-        console.log(response);
-        if (response.code === 200 ) {
-          const port: Portfolio = response.data;
-          this.positions = this.positions.filter(item => item.positionId !== positionId);
-          this.showPositions = this.positions;
-          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
-          this.message.success('Delete Success!', {
-            nzDuration: 10000
-          });
-        } else {
-          this.message.error('Delete Failure:' + response.msg, {
             nzDuration: 10000
           });
         }
