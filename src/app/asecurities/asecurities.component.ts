@@ -137,7 +137,7 @@ export class AsecuritiesComponent implements OnInit {
       this.api.updateSecurity(this.editCache[id].data).subscribe(
         response => {
           if (response.code === 200 ) {
-            this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
+            this.getSecurities();
             console.log('securityId:' + response.data.userId + ',update security success!');
           } else {
             console.error(response.msg + ': update security error!');
@@ -265,13 +265,14 @@ export class AsecuritiesComponent implements OnInit {
       .subscribe(() => echarts.resize());
     this.fetchData();
   }
-  getSecurities(): void {
+  public getSecurities(): void {
     this.api.getSecurities().subscribe(
       response => {
         if (response.code === 200 ) {
           this.securiries = response.data;
           this.showSecurities = this.securiries;
           this.updateEditCache();
+          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
           console.log( 'get securities success！');
           console.log(this.showSecurities);
         } else {
@@ -295,13 +296,10 @@ export class AsecuritiesComponent implements OnInit {
     this.api.uploadFile(this.selectSecurity, this.fileList[0], this.securityDateFeild, this.securityValueFeild).subscribe(
       response => {
         if (response.code === 200 ) {
-          this.message.success('Upload Success', {
-            nzDuration: 2000
-          });
+          this.getSecurities();
+          this.message.success('Upload ' + response.data + ' days data!');
         } else {
-          this.message.error('Upload Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Upload Failure:' + response.msg);
         }
       });
     this.fileList = [];

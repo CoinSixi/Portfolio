@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import {NzMessageService, NzNotificationService, UploadFile} from 'ng-zorro-antd';
 import set = Reflect.set;
 import {filter} from 'rxjs/operators';
+import {AsecuritiesComponent} from './asecurities/asecurities.component';
 
 // export const API_URL = new InjectionToken<string>('117.78.11.72:8080/');
 @Injectable({
@@ -170,10 +171,11 @@ export class ApiService {
     formData.append('file', file);
     formData.append('dateName', dateName);
     formData.append('priceName', priceName);
-    const req = new HttpRequest('POST', this.baseUrl + '/security/upload/' + securityId, formData, {
+    /*const req = new HttpRequest('POST', this.baseUrl + '/security/upload/' + securityId, formData, {
       // reportProgress: true
-    });
-    this.http
+    });*/
+    return this.http.post(this.baseUrl + '/security/upload/' + securityId, formData);
+    /*this.http
       .request(req)
       .pipe(filter(e => e instanceof HttpResponse))
       .subscribe(
@@ -187,7 +189,7 @@ export class ApiService {
         response => {
           this.message.error('Upload Failure!');
         }
-      );
+      );*/
     /*this.http.request(req).subscribe(
       response => {
         console.log(response);
