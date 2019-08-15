@@ -14,8 +14,8 @@ import {AsecuritiesComponent} from './asecurities/asecurities.component';
 })
 export class ApiService {
 
-  private baseUrl = 'http://192.168.43.49:8080';
-  // private baseUrl = 'http://117.78.11.72:8080';
+  // private baseUrl = 'http://192.168.43.49:8080';
+  private baseUrl = 'http://117.78.11.72:8080';
   // private baseUrl = 'http://localhost:8080';
   constructor(
     private http: HttpClient,
@@ -79,9 +79,9 @@ export class ApiService {
   }
 
   /** 登出 */
-  logoOut() {
+  logoOut(): Observable<any> {
     // this.tokenService.clear();
-    this.http.get('/user/logout');
+    return this.http.get(this.baseUrl + '/user/logout');
     // this.router.navigateByUrl('/user/logout');
   }
 
@@ -205,5 +205,9 @@ export class ApiService {
 
   getHistorySecurity(securityId: string): Observable<any> {
     return this.http.get(this.baseUrl + '/security/' + securityId);
+  }
+
+  getHistoryPriceByDate(portfolioId: string, dateType: number): Observable<any> {
+    return this.http.get(this.baseUrl + '/portfolio/history/' + portfolioId + '/' + dateType);
   }
 }

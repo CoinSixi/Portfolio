@@ -20,7 +20,7 @@ export class MportfolioComponent implements OnInit {
   title = 'app';
   data = {};
   chart ;
-  graph;
+  dateType = 1;
 
   editCache: { [key: string]: any } = {};
   portfolio: Portfolio = new Portfolio();
@@ -57,12 +57,13 @@ export class MportfolioComponent implements OnInit {
   select: Security = new Security();
   eChartDatas: any;
   eChartDatas2: any;
-  chartOption: any;
+  lineChartOption: any;
   chartOption2: any;
   resize = (document.body.clientHeight - 181) + 'px';
   app = {};
   myPieChart: any;
   myBarhart: any;
+  myLineChart: any;
   option = null;
   mapArray = [];
   pieOption: any;
@@ -73,25 +74,30 @@ export class MportfolioComponent implements OnInit {
     this.fetchData2();
   }
   fetchData() {
-    this.api.getHistoryPrice(this.portfolio.portfolioId).subscribe(
+    this.api.getHistoryPriceByDate(this.portfolio.portfolioId, this.dateType).subscribe(
       response => {
         if (response.code === 200) {
           this.eChartDatas = response.data;
-          this.showChart();
+          this.getLineChartOption();
           this.eChartDatas.forEach(tuple => {
             this.priceDate = tuple.date;
-            // console.log('eChartDatas==' + this.priceDate );
-            this.chartOption.xAxis[0].data.push(this.datePipe.transform(this.priceDate, 'yyyy-MM-dd'));
-            this.chartOption.series[0].data.push(tuple.price);
+            this.lineChartOption.xAxis[0].data.push(this.datePipe.transform(this.priceDate, 'yyyy-MM-dd'));
+            this.lineChartOption.series[0].data.push(tuple.price);
           });
+          this.showLineChart();
         } else {
           return;
         }
       }
     );
   }
-  showChart() {
-    this.chartOption = {
+  showLineChart() {
+    this.myLineChart = echarts.init(document.getElementById('lineContainer') as HTMLDivElement);
+    this.myLineChart.setOption(this.lineChartOption);
+    console.log('aaaaa:', this.lineChartOption.series[0].data);
+  }
+  getLineChartOption() {
+    this.lineChartOption = {
       title: {
         text: 'Total Price Trend',
         left: 'center',
@@ -519,6 +525,7 @@ export class MportfolioComponent implements OnInit {
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
     this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
     this.portfolio.userName = this.activatedRouter.snapshot.queryParams.manager;
+    this.portfolio.basePrice = this.activatedRouter.snapshot.queryParams.basePrice;
     console.log(this.portfolio);
     this.getPositions();
     fromEvent(window, 'resize')

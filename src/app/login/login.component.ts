@@ -40,10 +40,12 @@ export class LoginComponent implements OnInit {
       response => {
         if (response.code === 200 ) {
           const data = response.data;
+          console.log(data.userId);
           window.localStorage.setItem('userId', data.userId);
           window.localStorage.setItem('username', this.username);
           window.localStorage.setItem('role', data.role);
           window.localStorage.setItem('token', data.token);
+          console.log(window.localStorage.getItem('userId'));
           if (this.checked) {
             window.localStorage.setItem('password', this.password);
           } else {

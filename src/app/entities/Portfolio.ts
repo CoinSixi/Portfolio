@@ -6,5 +6,6 @@ export class Portfolio {
   userName: string;
   rateDay: number;
   rateTotal: number;
+  basePrice: number;
   [key: string]: any;
 }

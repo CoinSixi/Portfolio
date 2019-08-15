@@ -7,17 +7,19 @@ import { Observable, of } from 'rxjs';
 })
 
 export class ManagerService {
-  private baseUrl = 'http://192.168.43.49:8080';
-  // private baseUrl = 'http://117.78.11.72:8080';
+  // private baseUrl = 'http://192.168.43.49:8080';
+  private baseUrl = 'http://117.78.11.72:8080';
   // private baseUrl = 'http://localhost:8080';
   userId: string;
   constructor(private http: HttpClient) {
-    this.userId = window.localStorage.getItem('userId');
+
   }
 
   getPortfoliosList(): Observable<any> {
+    this.userId = window.localStorage.getItem('userId');
     const url = `${this.baseUrl}/portfolio`;
-    const params = new HttpParams().set('userId', this.userId)
+    console.log(this.userId);
+    const params = new HttpParams().set('userId', this.userId);
     /*return this.http
       .request('GET', url,
         {

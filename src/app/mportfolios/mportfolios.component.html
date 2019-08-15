@@ -16,6 +16,8 @@
     <th>Portfolio Name</th>
     <th>Create</th>
     <th>Update</th>
+    <th>BasePrice</th>
+    <th>TodayPrice</th>
     <th
       nzShowSort [(nzSort)]="mapOfSort.rateDay" (nzSortChange)="sort('rateDay', $event)"
     >Rating Lastday</th>
@@ -30,6 +32,8 @@
     <td class="portfolio-name" (click)="goDeatil(data)">{{ data.portfolioName }}</td>
     <td>{{ data.createTime | date: 'yyyy-MM-dd'  }}</td>
     <td>{{ data.updateTime | date: 'yyyy-MM-dd'  }}</td>
+    <td>{{ data.basePrice | number: '1.2' }}</td>
+    <td>{{ !data.basePrice?null:data.basePrice*(1+data.rateTotal) | number: '1.1' }}</td>
     <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
     <td>

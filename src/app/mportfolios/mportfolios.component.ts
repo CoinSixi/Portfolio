@@ -110,7 +110,8 @@ export class MportfoliosComponent implements OnInit {
   }
   goDeatil(portfolio: Portfolio): void {
     console.log(portfolio);
-    this.router.navigate(['/manager/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId, portfolioName: portfolio.portfolioName, rateTotal: portfolio.rateTotal, manager: portfolio.userName}});
+    this.router.navigate(['/manager/portfolio'], {queryParams: {portfolioId: portfolio.portfolioId,
+        portfolioName: portfolio.portfolioName, rateTotal: portfolio.rateTotal, manager: portfolio.userName, basePrice: portfolio.basePrice}});
   }
   sort(sortName: string, value: string): void {
     this.sortName = sortName;

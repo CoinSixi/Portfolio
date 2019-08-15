@@ -37,6 +37,7 @@ export class AportfoliosComponent implements OnInit {
         if (response.code === 200 ) {
           this.portfolios = response.data;
           this.showPortfolios = this.portfolios;
+          console.log(this.showPortfolios);
           console.log( 'get portfolios success！');
         } else {
           console.error( 'get portfolios error!');
