@@ -8,7 +8,7 @@
   </ng-template>
 </div>
 <nz-table #filterTable [nzData]="showPortfolios">
-  <thead (nzSortChange)="sort($event)" nzSingleSort>
+  <thead>
   <tr>
     <th>
       Portfolio Name
@@ -21,6 +21,7 @@
     <th
       nzShowSort [(nzSort)]="mapOfSort.rateTotal" (nzSortChange)="sort('rateTotal', $event)"
     >Rating Total</th>
+    <th>Operation</th>
   </tr>
   </thead>
   <tbody>
@@ -30,6 +31,9 @@
     <td>{{ data.updateTime | date: 'yyyy-MM-dd' }}</td>
     <td [ngClass]="{'color-red': data.rateDay>0, 'color-green': data.rateDay<0}">{{ data.rateDay | percent:'1.2-3' }}</td>
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
+    <td>
+      <a (click)="goDeatil(data)">Detail</a>
+    </td>
   </tr>
   </tbody>
 </nz-table>

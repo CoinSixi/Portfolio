@@ -74,23 +74,23 @@ export class MportfolioComponent implements OnInit {
   }
   showChart() {
     this.chartOption = {
-      backgroundColor: '#394056',
       title: {
         text: 'Total Price Trend',
-        left: '6%',
-        top: 20,
         textStyle: {
-          color: '#ccc'
-        }
+          fontWeight: 'normal',
+          fontSize: 16,
+          color: '#2c3e50'
+        },
+        left: '45%'
       },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
         }
-      },
+      }/*,
       legend: {
         icon: 'rect',
         itemWidth: 14,
@@ -102,7 +102,7 @@ export class MportfolioComponent implements OnInit {
           fontSize: 12,
           color: '#F1F1F3'
         }
-      },
+      }*/,
       grid: {
         left: '3%',
         right: '4%',
@@ -111,24 +111,40 @@ export class MportfolioComponent implements OnInit {
       },
       xAxis: [{
         type: 'category',
-        boundaryGap: false,
+        name: 'Date',
+        nameLocation: 'center',
+        nameGap: 18,
         axisLine: {
+          onZero: false,
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
         },
+
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
+        },
+        boundaryGap: false,
         data: [],
       }],
       yAxis: [{
         type: 'value',
+        name: 'Price',
         axisTick: {
           show: false
+        },
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
         },
         // min: 'dataMin',
         scale: true,
         axisLine: {
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
         },
         axisLabel: {
@@ -139,7 +155,7 @@ export class MportfolioComponent implements OnInit {
         },
         splitLine: {
           lineStyle: {
-            color: '#57617B'
+            color: '#e5e5e5'
           }
         }
       }],
@@ -156,7 +172,7 @@ export class MportfolioComponent implements OnInit {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
               offset: 0,
-              color: 'rgba(219, 50, 51, 0.3)'
+              color: '#1890ff'
             }, {
               offset: 0.8,
               color: 'rgba(219, 50, 51, 0)'
@@ -167,7 +183,7 @@ export class MportfolioComponent implements OnInit {
         },
         itemStyle: {
           normal: {
-            color: 'rgb(219,50,51)'
+            color: '#1890ff'
           }
         },
         data: []
@@ -200,6 +216,70 @@ export class MportfolioComponent implements OnInit {
       }
     );
   }
+  /*getPieChart() {
+    this.pieOption = {
+      title: {
+        text: 'Position Pie',
+        left: '40%',
+        top: 20,
+        textStyle: {
+          color: '#2c3e50'
+        }
+      },
+      tooltip : {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
+      visualMap: {
+        show: false,
+        min: 80,
+        max: 600,
+        inRange: {
+          colorLightness: [0, 1]
+        }
+      },
+      series : [
+        {
+          name: 'Security Name',
+          type: 'pie',
+          data: [].sort( (a, b) => a.value - b.value),
+          roseType: 'radius',
+          clockwise: true,
+          label: {
+            normal: {
+              textStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              lineStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              }
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'red' // 0% 处的颜色
+                }, {
+                  offset: 1, color: 'blue' // 100% 处的颜色
+                }],
+                global: false // 缺省为 false
+              }
+            }
+          }
+        }
+      ]
+    };
+  }*/
   getPieChart() {
     this.pieOption = {
       backgroundColor: '#2c343c',

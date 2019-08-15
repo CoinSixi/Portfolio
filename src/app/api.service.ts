@@ -168,7 +168,9 @@ export class ApiService {
       .subscribe(
         response => {
           console.log(response);
+          // @ts-ignore
           console.log(response.body.data);
+          // @ts-ignore
           this.message.success('Upload ' + response.body.data + ' days data!');
         },
         response => {

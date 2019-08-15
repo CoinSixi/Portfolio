@@ -333,26 +333,26 @@ export class AsecuritiesComponent implements OnInit {
     );
   }
   showChart() {
+    // @ts-ignore
     this.chartOption = {
-      backgroundColor: '#394056',
       title: {
-        text: 'Security Price Trend',
+        text: this.select.securityName + ' Price Trend',
         textStyle: {
           fontWeight: 'normal',
           fontSize: 16,
-          color: '#F1F1F3'
+          color: '#2c3e50'
         },
-        left: '6%'
+        left: '45%'
       },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
         }
       },
-      legend: {
+      /*legend: {
         icon: 'rect',
         itemWidth: 14,
         itemHeight: 5,
@@ -363,7 +363,7 @@ export class AsecuritiesComponent implements OnInit {
           fontSize: 12,
           color: '#F1F1F3'
         }
-      },
+      },*/
       grid: {
         left: '3%',
         right: '4%',
@@ -375,8 +375,13 @@ export class AsecuritiesComponent implements OnInit {
         boundaryGap: false,
         axisLine: {
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
+        },
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
         },
         data: [],
       }],
@@ -389,7 +394,7 @@ export class AsecuritiesComponent implements OnInit {
         scale: true,
         axisLine: {
           lineStyle: {
-            color: '#57617B'
+            color: '#2c3e50'
           }
         },
         axisLabel: {
@@ -400,9 +405,9 @@ export class AsecuritiesComponent implements OnInit {
         },
         splitLine: {
           lineStyle: {
-            color: '#57617B'
+            color: '#e5e5e5'
           }
-        }
+        },
       }],
       series: [ {
         name: 'Price',
@@ -410,6 +415,7 @@ export class AsecuritiesComponent implements OnInit {
         smooth: true,
         lineStyle: {
           normal: {
+            color: '#1890ff',
             width: 1
           }
         },
@@ -417,18 +423,18 @@ export class AsecuritiesComponent implements OnInit {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
               offset: 0,
-              color: 'rgba(219, 50, 51, 0.3)'
+              color: '#1890ff'
             }, {
               offset: 0.8,
-              color: 'rgba(219, 50, 51, 0)'
+              color: 'rgba(255, 255, 255, 0.3)'
             }], false),
-            shadowColor: 'rgba(0, 0, 0, 0.1)',
-            shadowBlur: 10
+            /*shadowColor: 'rgba(0, 0, 0, 0)',
+            shadowBlur: 0*/
           }
         },
         itemStyle: {
           normal: {
-            color: 'rgb(219,50,51)'
+            color: '#1890ff'
           }
         },
         data: []

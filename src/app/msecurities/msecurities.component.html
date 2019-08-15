@@ -41,6 +41,8 @@
     </td>
 
     <td>
+      <a  (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">Chart</a>
+      <nz-divider nzType="vertical"></nz-divider>
       <a (click)="showModal2(data.securityId)">Add</a>
     </td>
   </tr>
@@ -70,3 +72,7 @@
     <button nz-button nzType="primary" (click)="addPosion()" [nzLoading]="isConfirmLoading">Submit</button>
   </div>
 </nz-modal>
+
+<ng-template #contentTemplate>
+  <div echarts [options]="chartOption" class="line" style="height: 450px; width: 700px;"></div>
+</ng-template>

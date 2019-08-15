@@ -28,7 +28,7 @@
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
-    <td class="portfolio-name" (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">
+    <td class="portfolio-name">
       {{ data.securityName }}
     </td>
     <td>
@@ -55,6 +55,8 @@
         <a (click)="saveEdit(data.securityId)">Save</a>&nbsp;
         <a nz-popconfirm nzTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data.securityId)">Cancel</a>
       </ng-template>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a  (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">Chart</a>
       <nz-divider nzType="vertical"></nz-divider>
       <a (click)="showModal3(data.securityId)">Upload</a>
     </td>

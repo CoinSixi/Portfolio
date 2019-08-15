@@ -3,7 +3,10 @@ import {Security} from '../entities/Security';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Portfolio} from '../entities/Portfolio';
 import {ManagerService} from '../manager.service';
-import {NzMessageService} from 'ng-zorro-antd';
+import {NzMessageService, UploadFile} from 'ng-zorro-antd';
+import {DatePipe} from '@angular/common';
+import * as echarts from 'echarts';
+import {ApiService} from '../api.service';
 
 @Component({
   selector: 'app-msecurities',
@@ -40,10 +43,26 @@ export class MsecuritiesComponent implements OnInit {
   showSecurities: Security[];
   securiries: Security[];
   portfolios: Portfolio[] = [];
+
+  isVisible2 = false;
+  isConfirmLoading2 = false;
+  eChartDatas: any;
+  chartOption: any;
+  resize = (document.body.clientHeight - 181) + 'px';
+  app = {};
+  option = null;
+  priceDate = new Date();
+
+  select: Security = new Security();
   showModal2(securityId: string): void {
     this.selectSecurityId = securityId;
     this.getPortfolios();
     this.isVisible = true;
+  }
+  showModal4(select: Security): void {
+    this.isVisible2 = true;
+    this.select = select;
+    this.fetchData();
   }
   handleOk(): void {
     this.isVisible = false;
@@ -61,7 +80,8 @@ export class MsecuritiesComponent implements OnInit {
     }
     return {};
   }
-  constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService) {
+
+  constructor(private fb: FormBuilder, private managerService: ManagerService, private message: NzMessageService, private datePipe: DatePipe, private api: ApiService,) {
     this.validateForm = this.fb.group({
       portfolio: ['', [Validators.required]],
       count: ['', [Validators.required]]
@@ -98,10 +118,10 @@ export class MsecuritiesComponent implements OnInit {
     this.managerService.addPosition(portfolioId, this.selectSecurityId, this.count).subscribe(
       response => {
         if (response.code === 200 ) {
-          this.equity = '';
-          this.count = 0;
+          this.equity = null;
+          this.count = null;
           this.handleOk();
-          this.filter(this.listOfSearchName, '');
+          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
           this.message.success('Create Success!', {
             nzDuration: 2000
           });
@@ -170,6 +190,135 @@ export class MsecuritiesComponent implements OnInit {
     } else {
       this.showSecurities = listOfData;
     }
+  }
+  fetchData() {
+    console.log('get');
+    this.api.getHistorySecurity(this.select.securityId).subscribe(
+      response => {
+        if (response.code === 200) {
+          console.log(response);
+          this.eChartDatas = response.data;
+          this.showChart();
+          this.eChartDatas.forEach(tuple => {
+            this.priceDate = tuple.date;
+            // console.log('eChartDatas==' + this.priceDate );
+            this.chartOption.xAxis[0].data.push(this.datePipe.transform(this.priceDate, 'yyyy-MM-dd'));
+            this.chartOption.series[0].data.push(tuple.value);
+          });
+        } else {
+          return;
+        }
+      }
+    );
+  }
+  showChart() {
+    // @ts-ignore
+    this.chartOption = {
+      title: {
+        text: this.select.securityName + ' Price Trend',
+        textStyle: {
+          fontWeight: 'normal',
+          fontSize: 16,
+          color: '#2c3e50'
+        },
+        left: '45%'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        }
+      },
+      /*legend: {
+        icon: 'rect',
+        itemWidth: 14,
+        itemHeight: 5,
+        itemGap: 13,
+        data: [this.select.securityName],
+        right: '4%',
+        textStyle: {
+          fontSize: 12,
+          color: '#F1F1F3'
+        }
+      },*/
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
+        },
+        data: [],
+      }],
+      yAxis: [{
+        type: 'value',
+        axisTick: {
+          show: false
+        },
+        // min: 'dataMin',
+        scale: true,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        axisLabel: {
+          margin: 10,
+          textStyle: {
+            fontSize: 14
+          }
+        },
+        splitLine: {
+          lineStyle: {
+            color: '#e5e5e5'
+          }
+        },
+      }],
+      series: [ {
+        name: 'Price',
+        type: 'line',
+        smooth: true,
+        lineStyle: {
+          normal: {
+            color: '#1890ff',
+            width: 1
+          }
+        },
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: '#1890ff'
+            }, {
+              offset: 0.8,
+              color: 'rgba(255, 255, 255, 0.3)'
+            }], false),
+            /*shadowColor: 'rgba(0, 0, 0, 0)',
+            shadowBlur: 0*/
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#1890ff'
+          }
+        },
+        data: []
+      }, ]
+    };
   }
 
 }

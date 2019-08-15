@@ -34,6 +34,8 @@
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">{{ data.rateTotal | percent:'1.2-3' }}</td>
     <td>
       <a (click)="deletePortfolio(data.portfolioId)">Delete</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a (click)="goDeatil(data)">Detail</a>
     </td>
   </tr>
   </tbody>
