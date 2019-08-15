@@ -282,8 +282,6 @@ export class MportfolioComponent implements OnInit {
   }*/
   getPieChart() {
     this.pieOption = {
-      backgroundColor: '#2c343c',
-
       title: {
         text: 'Position Pie',
         left: '6%',
@@ -334,8 +332,6 @@ export class MportfolioComponent implements OnInit {
           itemStyle: {
             normal: {
               color: '#c23531',
-              shadowBlur: 200,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
           },
 
