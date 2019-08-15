@@ -7,8 +7,8 @@ import { Observable, of } from 'rxjs';
 })
 
 export class ManagerService {
-  // private baseUrl = 'http://192.168.43.49:8080';
-  private baseUrl = 'http://117.78.11.72:8080';
+  private baseUrl = 'http://192.168.43.49:8080';
+  // private baseUrl = 'http://117.78.11.72:8080';
   // private baseUrl = 'http://localhost:8080';
   userId: string;
   constructor(private http: HttpClient) {
@@ -16,19 +16,25 @@ export class ManagerService {
   }
 
   getPortfoliosList(): Observable<any> {
-    const url = `${this.baseUrl}/portfolio?user_id=3`;
+    const url = `${this.baseUrl}/portfolio`;
+    const params = new HttpParams().set('userId', this.userId)
     /*return this.http
       .request('GET', url,
         {
           responseType: 'json',
           params
         });*/
-    return this.http.get(url);
+    return this.http
+      .request('GET', url,
+        {
+          responseType: 'json',
+          params
+        });
   }
 
   addPortFolio(name: string): Observable<any> {
     const url = `${this.baseUrl}/portfolio`;
-    const params = new HttpParams().set('userId', '3').set('portfolioName', name);
+    const params = new HttpParams().set('userId', this.userId).set('portfolioName', name);
     return this.http
       .request('POST', url,
         {

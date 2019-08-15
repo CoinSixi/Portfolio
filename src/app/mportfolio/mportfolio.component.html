@@ -1,7 +1,5 @@
 <p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}
   <nz-divider nzType="vertical"></nz-divider>
-Manager:{{portfolio.userName}}
-  <nz-divider nzType="vertical"></nz-divider>
   Portfolio Performance:<span
     [ngClass]="{'color-red': portfolio.rateTotal>0, 'color-green': portfolio.rateTotal<0}">
     {{portfolio.rateTotal | percent:'1.2-3'}}</span>

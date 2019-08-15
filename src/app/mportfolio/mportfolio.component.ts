@@ -518,7 +518,8 @@ export class MportfolioComponent implements OnInit {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
     this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
-    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.userName;
+    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.manager;
+    console.log(this.portfolio);
     this.getPositions();
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
