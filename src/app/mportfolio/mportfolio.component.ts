@@ -44,9 +44,21 @@ export class MportfolioComponent implements OnInit {
     price: null,
     rateTotal: null,
   };
-
+  mapOfSort2: { [key: string]: any } = {
+    positionId: null,
+    portfolioId: null,
+    securityId: null,
+    securityName: null,
+    securityType: null,
+    quantity: null,
+    price: null,
+    rateTotal: null,
+  };
+  select: Security = new Security();
   eChartDatas: any;
+  eChartDatas2: any;
   chartOption: any;
+  chartOption2: any;
   resize = (document.body.clientHeight - 181) + 'px';
   app = {};
   myPieChart: any;
@@ -56,6 +68,10 @@ export class MportfolioComponent implements OnInit {
   pieOption: any;
   barOption: any;
   priceDate = new Date();
+  showModal4(select: Security): void {
+    this.select = select;
+    this.fetchData2();
+  }
   fetchData() {
     this.api.getHistoryPrice(this.portfolio.portfolioId).subscribe(
       response => {
@@ -192,40 +208,18 @@ export class MportfolioComponent implements OnInit {
       }, ]
     };
   }
-  showPositionPieAndBarChart(): void {
-    this.managerService.getPositions(this.portfolio.portfolioId).subscribe(
-      response => {
-        if (response.code === 200 ) {
-          // console.log(response.data);
-          this.positions = response.data;
-          this.getPieChartOption();
-          this.getBarChartOption();
-          this.positions.forEach(tuple => {
-            const mapPie: {[key: string]: any} = {
-              name: null,
-              value: null,
-            };
-            mapPie.name = tuple.securityName;
-            mapPie.value = tuple.quantity * tuple.price;
-            this.mapArray.push(mapPie);
-            this.barOption.xAxis[0].data.push(tuple.securityName);
-            this.barOption.series[0].data.push(tuple.quantity);
-          });
-          this.myPieChart = echarts.init(document.getElementById('pieContainer') as HTMLDivElement);
-          this.myBarhart = echarts.init(document.getElementById('barContainer') as HTMLDivElement);
-          this.pieOption.series[0].data = this.mapArray;
-          this.myPieChart.setOption(this.pieOption);
-          console.log('aaaaa:', this.barOption.series[0].data);
-          this.myBarhart.setOption(this.barOption);
-        } else {
-          console.error('获取饼图直方图数据失败！');
-        }
-      }
-    );
-  }
   getBarChartOption() {
     this.barOption = {
       color: ['#3398DB'],
+      title: {
+        text: 'Quantity Chart',
+        left: 'center',
+        top: 10,
+        bottom: 10,
+        textStyle: {
+          color: '#2c3e50'
+        }
+      },
       tooltip : {
         trigger: 'axis',
         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -233,8 +227,7 @@ export class MportfolioComponent implements OnInit {
         }
       },
       grid: {
-        left: '3%',
-        right: '4%',
+        left: '0%',
         bottom: '3%',
         containLabel: true
       },
@@ -262,17 +255,47 @@ export class MportfolioComponent implements OnInit {
       ]
     };
   }
+  showPositionPieAndBarChart(): void {
+    this.getPieChartOption();
+    this.getBarChartOption();
+    this.positions.forEach(tuple => {
+      const mapPie: {[key: string]: any} = {
+        name: null,
+        value: null,
+      };
+      mapPie.name = tuple.securityName;
+      mapPie.value = tuple.quantity * tuple.price;
+      this.mapArray.push(mapPie);
+      this.barOption.xAxis[0].data.push(tuple.securityName);
+      this.barOption.series[0].data.push(tuple.quantity);
+    });
+    this.myPieChart = echarts.init(document.getElementById('pieContainer') as HTMLDivElement);
+    this.myBarhart = echarts.init(document.getElementById('barContainer') as HTMLDivElement);
+    this.pieOption.series[0].data = this.mapArray;
+    this.myPieChart.setOption(this.pieOption);
+    console.log('aaaaa:', this.barOption.series[0].data);
+    this.myBarhart.setOption(this.barOption);
+  }
   getPieChartOption() {
     this.pieOption = {
       title: {
         text: 'Position Pie',
-        left: '6%',
-        top: 20,
+        left: 'center',
+        top: 10,
+        bottom: 10,
         textStyle: {
-          color: '#ccc'
+          color: '#2c3e50'
         }
       },
-
+      legend: {
+        icon: 'rect',
+        data: [this.portfolio.portfolioName],
+        right: '4%',
+        textStyle: {
+          fontSize: 12,
+          color: '#F1F1F3'
+        }
+      },
       tooltip : {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -280,10 +303,10 @@ export class MportfolioComponent implements OnInit {
 
       visualMap: {
         show: false,
-        min: 80,
-        max: 600,
+        min: 0,
+        max: 100000,
         inRange: {
-          colorLightness: [0, 1]
+          colorLightness: [0.3, 0.8]
         }
       },
       series : [
@@ -293,18 +316,17 @@ export class MportfolioComponent implements OnInit {
           radius : '55%',
           center: ['50%', '50%'],
           data: [].sort( (a, b) => a.value - b.value),
-          roseType: 'radius',
           label: {
             normal: {
               textStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
+                color: 'rgba(0, 0, 0, 0.3)'
               }
             }
           },
           labelLine: {
             normal: {
               lineStyle: {
-                color: 'rgba(255, 255, 255, 0.3)'
+                color: 'rgba(0, 0, 0, 0.3)'
               },
               smooth: 0.2,
               length: 10,
@@ -313,8 +335,10 @@ export class MportfolioComponent implements OnInit {
           },
           itemStyle: {
             normal: {
-              color: '#c23531',
-            }
+              color: '#1890ff',
+            },
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10
           },
 
           animationType: 'scale',
@@ -327,7 +351,134 @@ export class MportfolioComponent implements OnInit {
     };
 
   }
-
+  fetchData2() {
+    this.api.getHistorySecurity(this.select.securityId).subscribe(
+      response => {
+        if (response.code === 200) {
+          console.log(response);
+          this.eChartDatas2 = response.data;
+          this.showChart2();
+          this.eChartDatas2.forEach(tuple => {
+            this.priceDate = tuple.date;
+            // console.log('eChartDatas==' + this.priceDate );
+            this.chartOption2.xAxis[0].data.push(this.datePipe.transform(this.priceDate, 'yyyy-MM-dd'));
+            this.chartOption2.series[0].data.push(tuple.value);
+          });
+        } else {
+          return;
+        }
+      }
+    );
+  }
+  showChart2() {
+    // @ts-ignore
+    this.chartOption2 = {
+      title: {
+        text: this.select.securityName + ' Price Trend',
+        textStyle: {
+          fontWeight: 'normal',
+          fontSize: 16,
+          color: '#2c3e50'
+        },
+        left: '45%'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        }
+      },
+      /*legend: {
+        icon: 'rect',
+        itemWidth: 14,
+        itemHeight: 5,
+        itemGap: 13,
+        data: [this.select.securityName],
+        right: '4%',
+        textStyle: {
+          fontSize: 12,
+          color: '#F1F1F3'
+        }
+      },*/
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
+        },
+        data: [],
+      }],
+      yAxis: [{
+        type: 'value',
+        axisTick: {
+          show: false
+        },
+        // min: 'dataMin',
+        scale: true,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        axisLabel: {
+          margin: 10,
+          textStyle: {
+            fontSize: 14
+          }
+        },
+        splitLine: {
+          lineStyle: {
+            color: '#e5e5e5'
+          }
+        },
+      }],
+      series: [ {
+        name: 'Price',
+        type: 'line',
+        smooth: true,
+        lineStyle: {
+          normal: {
+            color: '#1890ff',
+            width: 1
+          }
+        },
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: '#1890ff'
+            }, {
+              offset: 0.8,
+              color: 'rgba(255, 255, 255, 0.3)'
+            }], false),
+            /*shadowColor: 'rgba(0, 0, 0, 0)',
+            shadowBlur: 0*/
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#1890ff'
+          }
+        },
+        data: []
+      }, ]
+    };
+  }
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
@@ -401,6 +552,7 @@ export class MportfolioComponent implements OnInit {
           this.positions = response.data;
           this.showPositions = this.positions;
           this.updateEditCache();
+          this.showPositionPieAndBarChart();
           // this.chartData();
         } else {
           this.message.error('Get Failure:' + response.msg, {

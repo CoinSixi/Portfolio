@@ -5,7 +5,7 @@
   <div id="pieContainer" style="height: 200px"></div>
 </div>
 <div style="width: 49%; height: 200px; float: left; background-color: #F0F2F5; margin-left: 2%">
-  <div id="barContainer" style="height: 200px"></div>
+  <div id="barContainer" style="height: 200px; width: 100%;"></div>
 </div>
 
 <p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
@@ -58,7 +58,12 @@
       </ng-template>
       <nz-divider nzType="vertical"></nz-divider>
       <a (click)="deletePosition(data.positionId)">Delete</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a  (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">Chart</a>
     </td>
   </tr>
   </tbody>
 </nz-table>
+<ng-template #contentTemplate>
+  <div echarts [options]="chartOption2" class="line" style="height: 450px; width: 700px;"></div>
+</ng-template>

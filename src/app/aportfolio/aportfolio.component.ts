@@ -8,6 +8,7 @@ import {ApiService} from '../api.service';
 import {fromEvent} from 'rxjs';
 import * as echarts from 'echarts';
 import {DatePipe} from '@angular/common';
+import {Security} from '../entities/Security';
 
 @Component({
   selector: 'app-aportfolio',
@@ -18,6 +19,9 @@ export class AportfolioComponent implements OnInit {
 
   title = 'app';
   data = {};
+  chart ;
+  graph;
+
   editCache: { [key: string]: any } = {};
   portfolio: Portfolio = new Portfolio();
   positions: Position[] = [];
@@ -40,14 +44,34 @@ export class AportfolioComponent implements OnInit {
     price: null,
     rateTotal: null,
   };
+  mapOfSort2: { [key: string]: any } = {
+    positionId: null,
+    portfolioId: null,
+    securityId: null,
+    securityName: null,
+    securityType: null,
+    quantity: null,
+    price: null,
+    rateTotal: null,
+  };
+  select: Security = new Security();
   eChartDatas: any;
+  eChartDatas2: any;
   chartOption: any;
+  chartOption2: any;
   resize = (document.body.clientHeight - 181) + 'px';
   app = {};
+  myPieChart: any;
+  myBarhart: any;
   option = null;
+  mapArray = [];
+  pieOption: any;
+  barOption: any;
   priceDate = new Date();
-  startEdit(id: string): void {
-    this.editCache[id].edit = true;
+
+  showModal4(select: Security): void {
+    this.select = select;
+    this.fetchData2();
   }
   fetchData() {
     this.api.getHistoryPrice(this.portfolio.portfolioId).subscribe(
@@ -185,7 +209,277 @@ export class AportfolioComponent implements OnInit {
       }, ]
     };
   }
+  getBarChartOption() {
+    this.barOption = {
+      color: ['#3398DB'],
+      title: {
+        text: 'Quantity Chart',
+        left: 'center',
+        top: 10,
+        bottom: 10,
+        textStyle: {
+          color: '#2c3e50'
+        }
+      },
+      tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+          type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+      },
+      grid: {
+        left: '0%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis : [
+        {
+          type : 'category',
+          data : [],
+          axisTick: {
+            alignWithLabel: true
+          }
+        }
+      ],
+      yAxis : [
+        {
+          type : 'value'
+        }
+      ],
+      series : [
+        {
+          name: 'quantity',
+          type: 'bar',
+          barWidth: '60%',
+          data: []
+        }
+      ]
+    };
+  }
+  showPositionPieAndBarChart(): void {
+    this.getPieChartOption();
+    this.getBarChartOption();
+    this.positions.forEach(tuple => {
+      const mapPie: {[key: string]: any} = {
+        name: null,
+        value: null,
+      };
+      mapPie.name = tuple.securityName;
+      mapPie.value = tuple.quantity * tuple.price;
+      this.mapArray.push(mapPie);
+      this.barOption.xAxis[0].data.push(tuple.securityName);
+      this.barOption.series[0].data.push(tuple.quantity);
+    });
+    this.myPieChart = echarts.init(document.getElementById('pieContainer') as HTMLDivElement);
+    this.myBarhart = echarts.init(document.getElementById('barContainer') as HTMLDivElement);
+    this.pieOption.series[0].data = this.mapArray;
+    this.myPieChart.setOption(this.pieOption);
+    console.log('aaaaa:', this.barOption.series[0].data);
+    this.myBarhart.setOption(this.barOption);
+  }
+  getPieChartOption() {
+    this.pieOption = {
+      title: {
+        text: 'Position Pie',
+        left: 'center',
+        top: 10,
+        bottom: 10,
+        textStyle: {
+          color: '#2c3e50'
+        }
+      },
+      legend: {
+        icon: 'rect',
+        data: [this.portfolio.portfolioName],
+        right: '4%',
+        textStyle: {
+          fontSize: 12,
+          color: '#F1F1F3'
+        }
+      },
+      tooltip : {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
 
+      visualMap: {
+        show: false,
+        min: 0,
+        max: 100000,
+        inRange: {
+          colorLightness: [0.3, 0.8]
+        }
+      },
+      series : [
+        {
+          name: 'Security Name',
+          type: 'pie',
+          radius : '55%',
+          center: ['50%', '50%'],
+          data: [].sort( (a, b) => a.value - b.value),
+          label: {
+            normal: {
+              textStyle: {
+                color: 'rgba(0, 0, 0, 0.3)'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              lineStyle: {
+                color: 'rgba(0, 0, 0, 0.3)'
+              },
+              smooth: 0.2,
+              length: 10,
+              length2: 20
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#1890ff',
+            },
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10
+          },
+
+          animationType: 'scale',
+          animationEasing: 'elasticOut',
+          /*animationDelay: function (idx) {
+            return Math.random() * 200;
+          }*/
+        }
+      ]
+    };
+
+  }
+  fetchData2() {
+    this.api.getHistorySecurity(this.select.securityId).subscribe(
+      response => {
+        if (response.code === 200) {
+          console.log(response);
+          this.eChartDatas2 = response.data;
+          this.showChart2();
+          this.eChartDatas2.forEach(tuple => {
+            this.priceDate = tuple.date;
+            // console.log('eChartDatas==' + this.priceDate );
+            this.chartOption2.xAxis[0].data.push(this.datePipe.transform(this.priceDate, 'yyyy-MM-dd'));
+            this.chartOption2.series[0].data.push(tuple.value);
+          });
+        } else {
+          return;
+        }
+      }
+    );
+  }
+  showChart2() {
+    // @ts-ignore
+    this.chartOption2 = {
+      title: {
+        text: this.select.securityName + ' Price Trend',
+        textStyle: {
+          fontWeight: 'normal',
+          fontSize: 16,
+          color: '#2c3e50'
+        },
+        left: '45%'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        }
+      },
+      /*legend: {
+        icon: 'rect',
+        itemWidth: 14,
+        itemHeight: 5,
+        itemGap: 13,
+        data: [this.select.securityName],
+        right: '4%',
+        textStyle: {
+          fontSize: 12,
+          color: '#F1F1F3'
+        }
+      },*/
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        nameTextStyle: {
+          fontStyle: 'normal',
+          fontWeight: 'bold',
+          color: '#2c3e50'
+        },
+        data: [],
+      }],
+      yAxis: [{
+        type: 'value',
+        axisTick: {
+          show: false
+        },
+        // min: 'dataMin',
+        scale: true,
+        axisLine: {
+          lineStyle: {
+            color: '#2c3e50'
+          }
+        },
+        axisLabel: {
+          margin: 10,
+          textStyle: {
+            fontSize: 14
+          }
+        },
+        splitLine: {
+          lineStyle: {
+            color: '#e5e5e5'
+          }
+        },
+      }],
+      series: [ {
+        name: 'Price',
+        type: 'line',
+        smooth: true,
+        lineStyle: {
+          normal: {
+            color: '#1890ff',
+            width: 1
+          }
+        },
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: '#1890ff'
+            }, {
+              offset: 0.8,
+              color: 'rgba(255, 255, 255, 0.3)'
+            }], false),
+            /*shadowColor: 'rgba(0, 0, 0, 0)',
+            shadowBlur: 0*/
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#1890ff'
+          }
+        },
+        data: []
+      }, ]
+    };
+  }
   constructor(public activatedRouter: ActivatedRoute,
               private managerService: ManagerService,
               private message: NzMessageService,
@@ -195,13 +489,31 @@ export class AportfolioComponent implements OnInit {
   ngOnInit() {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
-    this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
-    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.manager;
     this.getPositions();
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
     this.fetchData();
+    this.showPositionPieAndBarChart();
     // this.pieChart();
+  }
+
+  updatePosition(positionId: string): void {
+    console.log(this.editCache[positionId].data.quantity);
+    this.managerService.updatePosition(positionId, this.editCache[positionId].data.quantity).subscribe(
+      response => {
+        if (response.code === 200 ) {
+          const port: Portfolio = response.data;
+          this.getPositions();
+          this.message.success('Update Success!', {
+            nzDuration: 2000
+          });
+        } else {
+          this.message.error('Update Failure:' + response.msg, {
+            nzDuration: 2000
+          });
+        }
+      }
+    );
   }
 
   getPositions(): void {
@@ -211,6 +523,7 @@ export class AportfolioComponent implements OnInit {
           console.log(response.data);
           this.positions = response.data;
           this.showPositions = this.positions;
+          this.showPositionPieAndBarChart();
           // this.chartData();
         } else {
           this.message.error('Get Failure:' + response.msg, {
@@ -221,6 +534,26 @@ export class AportfolioComponent implements OnInit {
     );
   }
 
+  deletePosition(positionId: string): void {
+    this.managerService.deletePosition(positionId).subscribe(
+      response => {
+        console.log(response);
+        if (response.code === 200 ) {
+          const port: Portfolio = response.data;
+          this.positions = this.positions.filter(item => item.positionId !== positionId);
+          this.showPositions = this.positions;
+          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
+          this.message.success('Delete Success!', {
+            nzDuration: 10000
+          });
+        } else {
+          this.message.error('Delete Failure:' + response.msg, {
+            nzDuration: 10000
+          });
+        }
+      }
+    );
+  }
   filter(listOfSearchName: string[], searchAddress: string): void {
     this.listOfSearchName = listOfSearchName;
     this.searchAddress = searchAddress;

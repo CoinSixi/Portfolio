@@ -1,17 +1,13 @@
 
-<p style="font-size: 18px; font-weight: bold;">
-  Portfolio:{{portfolio.portfolioName}}
-  <nz-divider nzType="vertical"></nz-divider>
-  Manager:{{portfolio.userName}}
-  <nz-divider nzType="vertical"></nz-divider>Performance:
-  <span  [ngClass]="{'color-red': portfolio.rateTotal>0, 'color-green': portfolio.rateTotal<0}">
-    {{portfolio.rateTotal | percent:'1.2-3'}}</span>
-</p>
-
 <div echarts [options]="chartOption" class="line" style="width: 100%; height: 300px; padding-bottom: 10px;background-color: #F0F2F5"></div>
 <div style="width: 100%; height: 20px;background-color: #FFF"></div>
-<div style="width: 50%; height: 200px; float: left; background-color: #F0F2F5"></div>
-<div style="width: 50%; height: 200px; float: left; background-color: #F0F2F5"></div>
+<div style="width: 49%; height: 200px; float: left; background-color: #F0F2F5">
+  <div id="pieContainer" style="height: 200px"></div>
+</div>
+<div style="width: 49%; height: 200px; float: left; background-color: #F0F2F5; margin-left: 2%">
+  <div id="barContainer" style="height: 200px; width: 100%;"></div>
+</div>
+<p style="font-size: 20px; font-weight: bold;">Portfolio:{{portfolio.portfolioName}}</p>
 <nz-table #basicTable [nzData]="showPositions">
   <thead>
   <tr>
@@ -26,11 +22,12 @@
     >Price</th>
     <th  nzShowSort [(nzSort)]="mapOfSort.price" (nzSortChange)="sort('rateTotal', $event)"
     >Performance</th>
+    <th>Operation</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let data of basicTable.data">
-    <td>
+    <td >
       {{ data.securityName }}
     </td>
     <td>
@@ -45,6 +42,12 @@
     <td [ngClass]="{'color-red': data.rateTotal>0, 'color-green': data.rateTotal<0}">
       {{data.rateTotal | percent:'1.2-3'}}
     </td>
+    <td>
+      <a  (click)="showModal4(data)" nz-popover [nzContent]="contentTemplate">Chart</a>
+    </td>
   </tr>
   </tbody>
 </nz-table>
+<ng-template #contentTemplate>
+  <div echarts [options]="chartOption2" class="line" style="height: 450px; width: 700px;"></div>
+</ng-template>
