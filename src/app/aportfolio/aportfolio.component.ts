@@ -7,7 +7,7 @@ import {NzMessageService} from 'ng-zorro-antd';
 import {ApiService} from '../api.service';
 import {fromEvent} from 'rxjs';
 import * as echarts from 'echarts';
-import {DatePipe} from '@angular/common';
+import {DatePipe, formatNumber} from '@angular/common';
 import {Security} from '../entities/Security';
 
 @Component({
@@ -270,7 +270,7 @@ export class AportfolioComponent implements OnInit {
         value: null,
       };
       mapPie.name = tuple.securityName;
-      mapPie.value = tuple.quantity * tuple.price;
+      mapPie.value = tuple.quantity * tuple.price
       this.mapArray.push(mapPie);
       this.barOption.xAxis[0].data.push(tuple.securityName);
       this.barOption.series[0].data.push(tuple.quantity);
@@ -495,7 +495,8 @@ export class AportfolioComponent implements OnInit {
     this.portfolio.portfolioId = this.activatedRouter.snapshot.queryParams.portfolioId;
     this.portfolio.portfolioName = this.activatedRouter.snapshot.queryParams.portfolioName;
     this.portfolio.rateTotal = this.activatedRouter.snapshot.queryParams.rateTotal;
-    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.userName;
+    this.portfolio.userName = this.activatedRouter.snapshot.queryParams.manager;
+    console.log(this.portfolio);
     this.getPositions();
     fromEvent(window, 'resize')
       .subscribe(() => echarts.resize());
