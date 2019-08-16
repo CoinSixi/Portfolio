@@ -560,6 +560,7 @@ export class MportfolioComponent implements OnInit {
           console.log(response.data);
           this.positions = response.data;
           this.showPositions = this.positions;
+          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
           this.updateEditCache();
           this.fetchData();
           this.showPositionPieAndBarChart();
@@ -576,10 +577,10 @@ export class MportfolioComponent implements OnInit {
       response => {
         console.log(response);
         if (response.code === 200 ) {
-          const port: Portfolio = response.data;
-          this.positions = this.positions.filter(item => item.positionId !== positionId);
-          this.showPositions = this.positions;
-          this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
+          this.mapArray = [];
+          this.barOption.xAxis[0].data = [];
+          this.barOption.series[0].data = [];
+          this.getPositions();
           this.message.success('Delete Success!');
         } else {
           this.message.error('Delete Failure:' + response.msg);
