@@ -545,13 +545,9 @@ export class MportfolioComponent implements OnInit {
           this.barOption.xAxis[0].data = [];
           this.barOption.series[0].data = [];
           this.getPositions();
-          this.message.success('Update Success!', {
-            nzDuration: 2000
-          });
+          this.message.success('Update Success!');
         } else {
-          this.message.error('Update Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Update Failure:' + response.msg);
         }
       }
     );
@@ -569,9 +565,7 @@ export class MportfolioComponent implements OnInit {
           this.showPositionPieAndBarChart();
           // this.chartData();
         } else {
-          this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 10000
-          });
+          this.message.error('Get Failure:' + response.msg);
         }
       }
     );
@@ -586,13 +580,9 @@ export class MportfolioComponent implements OnInit {
           this.positions = this.positions.filter(item => item.positionId !== positionId);
           this.showPositions = this.positions;
           this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
-          this.message.success('Delete Success!', {
-            nzDuration: 10000
-          });
+          this.message.success('Delete Success!');
         } else {
-          this.message.error('Delete Failure:' + response.msg, {
-            nzDuration: 10000
-          });
+          this.message.error('Delete Failure:' + response.msg);
         }
       }
     );

@@ -105,9 +105,7 @@ export class MsecuritiesComponent implements OnInit {
           this.securiries = response.data;
           this.showSecurities = response.data;
         } else {
-          this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Get Failure:' + response.msg);
         }
       }
     );
@@ -122,13 +120,9 @@ export class MsecuritiesComponent implements OnInit {
           this.count = null;
           this.handleOk();
           this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
-          this.message.success('Create Success!', {
-            nzDuration: 2000
-          });
+          this.message.success('Create Success!');
         } else {
-          this.message.error('Create Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Create Failure:' + response.msg);
         }
       }
     );

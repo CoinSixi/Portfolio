@@ -59,9 +59,7 @@ export class MportfoliosComponent implements OnInit {
           this.showPortfolios = response.data;
           this.searchText();
         } else {
-          this.message.error('Get Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Get Failure:' + response.msg);
         }
       }
     );
@@ -76,13 +74,9 @@ export class MportfoliosComponent implements OnInit {
           const port: Portfolio = response.data;
           this.getPortfolios();
           this.handleOk();
-          this.message.success('Create Success!', {
-            nzDuration: 2000
-          });
+          this.message.success('Create Success!');
         } else {
-          this.message.error('Create Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Create Failure:' + response.msg);
         }
         this.portfolioName = '';
       }
@@ -96,13 +90,9 @@ export class MportfoliosComponent implements OnInit {
         if (response.code === 200 ) {
           const port: Portfolio = response.data;
           this.getPortfolios();
-          this.message.success('Delete Success!', {
-            nzDuration: 2000
-          });
+          this.message.success('Delete Success!');
         } else {
-          this.message.error('Delete Failure:' + response.msg, {
-            nzDuration: 2000
-          });
+          this.message.error('Delete Failure:' + response.msg);
         }
         this.portfolioName = '';
       }

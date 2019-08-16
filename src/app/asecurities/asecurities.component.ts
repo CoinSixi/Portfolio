@@ -90,14 +90,12 @@ export class AsecuritiesComponent implements OnInit {
     this.api.addSecurity(this.addSecurityName, this.addSecurityType).subscribe(
       response => {
         if (response.code === 200) {
-          this.message.success('Add security success', {
-            nzDuration: 2000
-          });
           this.addSecurityName = '';
           this.addSecurityType = '';
           this.getSecurities();
           this.isVisible = false;
           this.isConfirmLoading = false;
+          this.message.success('Add security success!');
         } else {
           this.message.error('Add security error:' + response.msg, {
             nzDuration: 2000
@@ -138,9 +136,9 @@ export class AsecuritiesComponent implements OnInit {
         response => {
           if (response.code === 200 ) {
             this.getSecurities();
-            console.log('securityId:' + response.data.userId + ',update security success!');
+            this.message.success('Update security success!');
           } else {
-            console.error(response.msg + ': update security error!');
+            this.message.error('Update security failure:' + response.msg);
           }
         }
       );
@@ -149,9 +147,9 @@ export class AsecuritiesComponent implements OnInit {
         response => {
           if (response.code === 200 ) {
             this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
-            console.log('securityId:' + response.data.userId + ',update security success!');
+            this.message.success('Update security success!');
           } else {
-            console.error(response.msg + ': update security error!');
+            this.message.error('Update security failure:' + response.msg);
           }
         }
       );
@@ -273,7 +271,6 @@ export class AsecuritiesComponent implements OnInit {
           this.showSecurities = this.securiries;
           this.updateEditCache();
           this.filter(this.listOfSearchName.length !== 0 ? this.listOfSearchName : ['equity', 'fx', 'commodity', 'index', 'future'], '');
-          console.log( 'get securities success！');
           console.log(this.showSecurities);
         } else {
           this.message.error('Get Securities Failure:' + response.msg, {
