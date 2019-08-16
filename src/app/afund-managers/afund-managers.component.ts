@@ -5,6 +5,7 @@ import {Observable, Observer} from 'rxjs';
 import {ApiService} from '../api.service';
 import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {Portfolio} from '../entities/Portfolio';
+import {NzMessageService} from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-afund-managers',
@@ -38,6 +39,7 @@ export class AfundManagersComponent implements OnInit {
         if (response.code === 200) {
           this.getUsers();
           console.log('addfunduser==' + response.data.userId);
+          this.message.success('Add Success!');
         }
       }
     );
@@ -68,8 +70,10 @@ export class AfundManagersComponent implements OnInit {
         if (response.code === 200 ) {
           this.getUsers();
           console.log('userid:' + response.data.userId + ',update funduser success!');
+          this.message.success('Update Success!');
         } else {
           console.log('update funduser error: ' + response.msg);
+          this.message.error('Update Failure!');
         }
       }
     );
@@ -81,9 +85,11 @@ export class AfundManagersComponent implements OnInit {
         if (response.code === 200 ) {
           const data = response.data;
           this.getUsers();
+          this.message.success('Delete Success!');
           console.log('delete funduser success!');
         } else {
           console.error('delete funduser error!');
+          this.message.error('Delete Failure!');
         }
 
       }
@@ -126,7 +132,7 @@ export class AfundManagersComponent implements OnInit {
     }
     return {};
   }
-  constructor(private fb: FormBuilder, private api: ApiService) {
+  constructor(private fb: FormBuilder, private api: ApiService, private message: NzMessageService) {
     this.validateForm = this.fb.group({
       username: ['', [Validators.required], [this.userNameAsyncValidator]],
       phone: ['', [Validators.required]],
