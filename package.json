@@ -22,7 +22,7 @@
     "@antv/f2": "^3.4.0",
     "@antv/g2": "^3.5.8-beta.1",
     "angular-datatables": "^8.0.0",
-    "datatables.net": "^1.10.19",
+    "datatables.net": "^1.10.22",
     "datatables.net-dt": "^1.10.19",
     "echarts": "^4.2.1",
     "g2-angular": "^7.0.1",
